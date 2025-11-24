@@ -4,11 +4,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { LandingPage } from '@/pages/landing';
 import { LoginPage } from '@/pages/login';
 import '@/styles/global.css';
-import { FindTutorPage } from './pages/find.tutor';
-import { MyCourse } from './pages/myCourse';
-import { TutorPage } from './pages/tutorSchedule';
-import { ProfilePage } from './pages/profile';
-import { FeedBackPage } from './pages/feedback';
+import { FindTutorPage } from '@/pages/find.tutor';
+import { MyCourse } from '@/pages/myCourse';
+import { TutorPage } from '@/pages/tutorSchedule';
+import { ProfilePage } from '@/pages/profile';
+import { FeedBackPage } from '@/pages/feedback';
 
 const router = createBrowserRouter([
 	{

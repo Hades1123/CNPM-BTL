@@ -47,125 +47,122 @@ export const TutorPage = () => {
 							</div>
 						</div>
 
-						<div className="daily-schedule-container">
-							{/* <!-- Thứ 2 --> */}
-							<div className="day-schedule">
-								<div className="day-header">
-									<i className="material-icons">event</i>
-									Thứ 2, 21/10/2025
+						<div className="weekly-schedule">
+							{/* Header Row for Days */}
+							<div className="week-header">
+								<div className="day-col-header">
+									<span className="day-name">Thứ 2</span>
+									<span className="day-date">21/10</span>
 								</div>
-								<div className="time-slots-grid">
-									<div className="time-slot-item available">
-										<div className="time-slot-time">8:00 - 9:30</div>
-										<div className="time-slot-status">Rảnh</div>
-									</div>
-									<div className="time-slot-item unavailable">
-										<div className="time-slot-time">9:30 - 11:00</div>
-										<div className="time-slot-status">Bận</div>
-									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">14:00 - 15:30</div>
-										<div className="time-slot-status">Rảnh</div>
-									</div>
-									<div className="time-slot-item booked">
-										<div className="time-slot-time">15:30 - 17:00</div>
-										<div className="time-slot-status">Đã đăng ký</div>
-									</div>
+								<div className="day-col-header">
+									<span className="day-name">Thứ 3</span>
+									<span className="day-date">22/10</span>
+								</div>
+								<div className="day-col-header">
+									<span className="day-name">Thứ 4</span>
+									<span className="day-date">23/10</span>
+								</div>
+								<div className="day-col-header">
+									<span className="day-name">Thứ 5</span>
+									<span className="day-date">24/10</span>
+								</div>
+								<div className="day-col-header">
+									<span className="day-name">Thứ 6</span>
+									<span className="day-date">25/10</span>
 								</div>
 							</div>
 
-							{/* <!-- Thứ 3 --> */}
-							<div className="day-schedule">
-								<div className="day-header">
-									<i className="material-icons">event</i>
-									Thứ 3, 22/10/2025
-								</div>
-								<div className="time-slots-grid">
-									<div className="time-slot-item available">
-										<div className="time-slot-time">8:00 - 9:30</div>
-										<div className="time-slot-status">Rảnh</div>
+							{/* Grid for Time Slots */}
+							<div className="week-grid">
+								{/* Monday Column */}
+								<div className="day-column">
+									<div className="time-slot slot-available">
+										<span className="slot-time">8:00 - 9:30</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item booked">
-										<div className="time-slot-time">10:00 - 11:30</div>
-										<div className="time-slot-status">Đã đăng ký</div>
+									<div className="time-slot slot-unavailable">
+										<span className="slot-time">9:30 - 11:00</span>
+										<span className="slot-label">Bận</span>
 									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">14:00 - 15:30</div>
-										<div className="time-slot-status">Rảnh</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">14:00 - 15:30</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">15:30 - 17:00</div>
-										<div className="time-slot-status">Rảnh</div>
+									<div className="time-slot slot-booked">
+										<span className="slot-time">15:30 - 17:00</span>
+										<span className="slot-label">Đã ĐK</span>
 									</div>
 								</div>
-							</div>
 
-							{/* <!-- Thứ 4 --> */}
-							<div className="day-schedule">
-								<div className="day-header">
-									<i className="material-icons">event</i>
-									Thứ 4, 23/10/2025
-								</div>
-								<div className="time-slots-grid">
-									<div className="time-slot-item unavailable">
-										<div className="time-slot-time">8:00 - 10:00</div>
-										<div className="time-slot-status">Bận</div>
+								{/* Tuesday Column */}
+								<div className="day-column">
+									<div className="time-slot slot-available">
+										<span className="slot-time">8:00 - 9:30</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">10:00 - 11:30</div>
-										<div className="time-slot-status">Rảnh</div>
+									<div className="time-slot slot-booked">
+										<span className="slot-time">10:00 - 11:30</span>
+										<span className="slot-label">Đã ĐK</span>
 									</div>
-									<div className="time-slot-item booked">
-										<div className="time-slot-time">14:00 - 15:30</div>
-										<div className="time-slot-status">Đã đăng ký</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">14:00 - 15:30</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">15:30 - 17:00</div>
-										<div className="time-slot-status">Rảnh</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">15:30 - 17:00</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
 								</div>
-							</div>
 
-							{/* <!-- Thứ 5 --> */}
-							<div className="day-schedule">
-								<div className="day-header">
-									<i className="material-icons">event</i>
-									Thứ 5, 24/10/2025
+								{/* Wednesday Column */}
+								<div className="day-column">
+									<div className="time-slot slot-unavailable">
+										<span className="slot-time">8:00 - 10:00</span>
+										<span className="slot-label">Bận</span>
+									</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">10:00 - 11:30</span>
+										<span className="slot-label">Rảnh</span>
+									</div>
+									<div className="time-slot slot-booked">
+										<span className="slot-time">14:00 - 15:30</span>
+										<span className="slot-label">Đã ĐK</span>
+									</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">15:30 - 17:00</span>
+										<span className="slot-label">Rảnh</span>
+									</div>
 								</div>
-								<div className="time-slots-grid">
-									<div className="time-slot-item available">
-										<div className="time-slot-time">8:00 - 9:30</div>
-										<div className="time-slot-status">Rảnh</div>
-									</div>
-									<div className="time-slot-item booked">
-										<div className="time-slot-time">10:00 - 11:30</div>
-										<div className="time-slot-status">Đã đăng ký</div>
-									</div>
-									<div className="time-slot-item unavailable">
-										<div className="time-slot-time">14:00 - 16:00</div>
-										<div className="time-slot-status">Bận</div>
-									</div>
-								</div>
-							</div>
 
-							{/* <!-- Thứ 6 --> */}
-							<div className="day-schedule">
-								<div className="day-header">
-									<i className="material-icons">event</i>
-									Thứ 6, 25/10/2025
+								{/* Thursday Column */}
+								<div className="day-column">
+									<div className="time-slot slot-available">
+										<span className="slot-time">8:00 - 9:30</span>
+										<span className="slot-label">Rảnh</span>
+									</div>
+									<div className="time-slot slot-booked">
+										<span className="slot-time">10:00 - 11:30</span>
+										<span className="slot-label">Đã ĐK</span>
+									</div>
+									<div className="time-slot slot-unavailable">
+										<span className="slot-time">14:00 - 16:00</span>
+										<span className="slot-label">Bận</span>
+									</div>
 								</div>
-								<div className="time-slots-grid">
-									<div className="time-slot-item available">
-										<div className="time-slot-time">8:00 - 9:30</div>
-										<div className="time-slot-status">Rảnh</div>
+
+								{/* Friday Column */}
+								<div className="day-column">
+									<div className="time-slot slot-available">
+										<span className="slot-time">8:00 - 9:30</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item available">
-										<div className="time-slot-time">9:30 - 11:00</div>
-										<div className="time-slot-status">Rảnh</div>
+									<div className="time-slot slot-available">
+										<span className="slot-time">9:30 - 11:00</span>
+										<span className="slot-label">Rảnh</span>
 									</div>
-									<div className="time-slot-item booked">
-										<div className="time-slot-time">14:00 - 15:30</div>
-										<div className="time-slot-status">Đã đăng ký</div>
+									<div className="time-slot slot-booked">
+										<span className="slot-time">14:00 - 15:30</span>
+										<span className="slot-label">Đã ĐK</span>
 									</div>
 								</div>
 							</div>
