@@ -176,19 +176,19 @@ export const TutorPage = () => {
 					<section className="add-availability-section">
 						<h2 className="section-title">Thêm lịch rảnh định kỳ</h2>
 
-						<div className="htmlForm-row">
-							<div className="htmlForm-group">
-								<label className="htmlForm-label">Từ ngày</label>
-								<input type="date" className="htmlForm-input" />
+						<div className="form-row">
+							<div className="form-group">
+								<label className="form-label">Từ ngày</label>
+								<input type="date" className="form-input" />
 							</div>
-							<div className="htmlForm-group">
-								<label className="htmlForm-label">Đến ngày</label>
-								<input type="date" className="htmlForm-input" />
+							<div className="form-group">
+								<label className="form-label">Đến ngày</label>
+								<input type="date" className="form-input" />
 							</div>
 						</div>
 
-						<div className="htmlForm-group">
-							<label className="htmlForm-label">Lặp lại vào các ngày</label>
+						<div className="form-group">
+							<label className="form-label">Lặp lại vào các ngày</label>
 							<div className="weekdays-selector">
 								<div className="weekday-checkbox">
 									<input type="checkbox" id="monday" />
@@ -221,20 +221,20 @@ export const TutorPage = () => {
 							</div>
 						</div>
 
-						<div className="htmlForm-row">
-							<div className="htmlForm-group">
-								<label className="htmlForm-label">Thời gian bắt đầu</label>
-								<input type="time" className="htmlForm-input" />
+						<div className="form-row">
+							<div className="form-group">
+								<label className="form-label">Thời gian bắt đầu</label>
+								<input type="time" className="form-input" />
 							</div>
-							<div className="htmlForm-group">
-								<label className="htmlForm-label">Thời gian kết thúc</label>
-								<input type="time" className="htmlForm-input" />
+							<div className="form-group">
+								<label className="form-label">Thời gian kết thúc</label>
+								<input type="time" className="form-input" />
 							</div>
 						</div>
 
-						<div className="htmlForm-group">
-							<label className="htmlForm-label">Số lượng sinh viên tối đa</label>
-							<select className="htmlForm-select">
+						<div className="form-group">
+							<label className="form-label">Số lượng sinh viên tối đa</label>
+							<select className="form-select">
 								<option>1 sinh viên</option>
 								<option>2 sinh viên</option>
 								<option>3 sinh viên</option>
@@ -243,9 +243,9 @@ export const TutorPage = () => {
 							</select>
 						</div>
 
-						<div className="htmlForm-actions">
-							<button className="htmlForm-button secondary-button">Hủy</button>
-							<button className="htmlForm-button primary-button">Thêm lịch rảnh</button>
+						<div className="form-actions">
+							<button className="form-button secondary-button">Hủy</button>
+							<button className="form-button primary-button">Thêm lịch rảnh</button>
 						</div>
 					</section>
 
