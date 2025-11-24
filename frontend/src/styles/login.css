@@ -4,7 +4,9 @@
 	justify-content: space-between;
 }
 
-.poster-container {
+/* Common styles moved to global.css */
+
+.login-poster-container {
 	width: 100%;
 	min-height: 960px;
 	margin: 0 auto;
@@ -16,30 +18,7 @@
 	flex-direction: column;
 }
 
-.background-shape {
-	position: absolute;
-	border-radius: 50%;
-	opacity: 0.1;
-	z-index: 0;
-}
-
-.shape-1 {
-	width: 400px;
-	height: 400px;
-	background: #0056b3;
-	top: -100px;
-	right: -100px;
-}
-
-.shape-2 {
-	width: 300px;
-	height: 300px;
-	background: #0056b3;
-	bottom: 100px;
-	left: -100px;
-}
-
-.content {
+.login-content {
 	position: relative;
 	z-index: 1;
 	padding: 40px;
@@ -49,7 +28,7 @@
 }
 
 /* Header Styles */
-.header {
+.login-header {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -129,7 +108,7 @@
 	font-size: 16px;
 }
 
-.logo {
+.login-logo {
 	display: flex;
 	align-items: center;
 	gap: 15px;
@@ -384,7 +363,7 @@
 }
 
 /* Footer */
-.footer {
+.login-footer {
 	text-align: center;
 	color: #666;
 	font-size: 14px;

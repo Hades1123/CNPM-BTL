@@ -1,15 +1,15 @@
 import '@/styles/login.css';
 export const LoginPage = () => {
 	return (
-		<div className="poster-container">
+		<div className="login-poster-container">
 			{/* <!-- Background Shapes --> */}
 			<div className="background-shape shape-1"></div>
 			<div className="background-shape shape-2"></div>
 
-			<div className="content">
+			<div className="login-content">
 				{/* <!-- Header --> */}
 				<div className="header-content">
-					<header className="header">
+					<header className="login-header">
 						{/* <!-- Navigation Links -->
                     <div className="header-nav">
                         <a href="#">Trang chủ</a>
@@ -18,7 +18,7 @@ export const LoginPage = () => {
                         <a href="#">Hỗ trợ</a>
                     </div> --> */}
 
-						<div className="logo">
+						<div className="login-logo">
 							<img src="https://sfile.chatglm.cn/images-ppt/47f595050ee8.svg" alt="HCMUT Logo" className="logo-image" />
 							<div className="logo-text">Tutor Support System</div>
 						</div>
@@ -141,7 +141,7 @@ export const LoginPage = () => {
 				</div>
 
 				{/* <!-- Footer --> */}
-				<footer className="footer">
+				<footer className="login-footer">
 					<p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
 					<p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH - TRƯƠNG ĐẠI HỌC BÁCH KHOA</p>
 				</footer>

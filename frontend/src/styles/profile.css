@@ -1,4 +1,6 @@
-.poster-container {
+/* Common styles moved to global.css */
+
+.profile-poster-container {
 	width: 100%;
 	min-height: 100vh;
 	margin: 0;
@@ -12,49 +14,18 @@
 
 /* Desktop responsive design */
 @media (min-width: 1200px) {
-	.poster-container {
+	.profile-poster-container {
 		padding: 0 40px;
 	}
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
-	.poster-container {
+	.profile-poster-container {
 		padding: 0 20px;
 	}
 }
 
-.background-shape {
-	position: absolute;
-	border-radius: 50%;
-	opacity: 0.1;
-	z-index: 0;
-}
-
-.shape-1 {
-	width: 400px;
-	height: 400px;
-	background: #0056b3;
-	top: -100px;
-	right: -100px;
-}
-
-.shape-2 {
-	width: 300px;
-	height: 300px;
-	background: #0056b3;
-	bottom: 100px;
-	left: -100px;
-}
-
-.shape-3 {
-	width: 200px;
-	height: 200px;
-	background: #0056b3;
-	bottom: -50px;
-	right: 100px;
-}
-
-.content {
+.profile-content {
 	position: relative;
 	z-index: 1;
 	padding: 40px 20px;
@@ -68,73 +39,8 @@
 
 /* Desktop content adjustments */
 @media (min-width: 1200px) {
-	.content {
+	.profile-content {
 		padding: 60px 40px;
-	}
-}
-
-/* Header Styles */
-.header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 20px 0;
-	border-bottom: 1px solid rgba(0, 86, 179, 0.2);
-}
-
-.logo {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-
-.logo-icon {
-	width: 40px;
-	height: 40px;
-	background-color: #0056b3;
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-}
-
-.logo-text {
-	font-size: 18px;
-	font-weight: 700;
-	color: #0056b3;
-}
-
-.nav-menu {
-	display: flex;
-	gap: 20px;
-}
-
-.nav-item {
-	color: #555;
-	font-weight: 500;
-	cursor: pointer;
-	transition: color 0.3s;
-}
-
-.nav-item:hover {
-	color: #0056b3;
-}
-
-/* Page Title */
-.page-title {
-	font-size: 32px;
-	font-weight: 700;
-	color: #0056b3;
-	margin: 30px 0;
-	text-align: center;
-}
-
-/* Desktop title adjustments */
-@media (min-width: 992px) {
-	.page-title {
-		font-size: 42px;
-		margin: 40px 0;
 	}
 }
 
@@ -558,7 +464,7 @@
 }
 
 /* Footer */
-.footer {
+.profile-footer {
 	margin-top: auto;
 	text-align: center;
 	color: #666;
@@ -569,12 +475,12 @@
 
 /* Desktop footer adjustments */
 @media (min-width: 992px) {
-	.footer {
+	.profile-footer {
 		padding: 40px 0;
 		font-size: 16px;
 	}
 
-	.footer p {
+	.profile-footer p {
 		margin-bottom: 8px;
 	}
 }

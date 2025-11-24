@@ -197,7 +197,7 @@ export const LandingPage = () => {
 					</section>
 
 					{/* <!-- Footer --> */}
-					<footer className="footer">
+					<footer className="landing-footer">
 						<div className="footer-content">
 							<div className="footer-column">
 								<h3 className="footer-title">Về dự án</h3>

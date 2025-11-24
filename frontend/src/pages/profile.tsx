@@ -2,13 +2,13 @@ import '@/styles/profile.css';
 export const ProfilePage = () => {
 	return (
 		<>
-			<div className="poster-container">
+			<div className="profile-poster-container">
 				{/* <!-- Background Shapes --> */}
 				<div className="background-shape shape-1"></div>
 				<div className="background-shape shape-2"></div>
 				<div className="background-shape shape-3"></div>
 
-				<div className="content">
+				<div className="profile-content">
 					{/* <!-- Header --> */}
 					<header className="header">
 						<div className="logo">
@@ -322,7 +322,7 @@ export const ProfilePage = () => {
 					</div>
 
 					{/* <!-- Footer --> */}
-					<footer className="footer">
+					<footer className="profile-footer">
 						<p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
 						<p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH - TRƯƠNG ĐẠI HỌC BÁCH KHOA</p>
 					</footer>

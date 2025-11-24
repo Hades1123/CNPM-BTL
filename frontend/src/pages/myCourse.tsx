@@ -162,10 +162,8 @@ export const MyCourse = () => {
 						{/* <!-- Session Card 1 - Upcoming --> */}
 						<div className="session-card">
 							<div className="session-header">
-								<div>
-									<h3 className="session-title">Toán cao cấp</h3>
-									<div className="session-status status-upcoming">Sắp diễn ra</div>
-								</div>
+								<h3 className="session-title">Toán cao cấp</h3>
+								<div className="session-status status-upcoming">Sắp diễn ra</div>
 							</div>
 
 							<div className="session-info">
@@ -225,10 +223,8 @@ export const MyCourse = () => {
 						{/* <!-- Session Card 2 - Completed --> */}
 						<div className="session-card">
 							<div className="session-header">
-								<div>
-									<h3 className="session-title">Lập trình cơ bản</h3>
-									<div className="session-status status-completed">Đã hoàn thành</div>
-								</div>
+								<h3 className="session-title">Lập trình cơ bản</h3>
+								<div className="session-status status-completed">Đã hoàn thành</div>
 							</div>
 
 							<div className="session-info">
@@ -283,10 +279,8 @@ export const MyCourse = () => {
 						{/* <!-- Session Card 3 - Upcoming --> */}
 						<div className="session-card">
 							<div className="session-header">
-								<div>
-									<h3 className="session-title">Cấu trúc dữ liệu</h3>
-									<div className="session-status status-upcoming">Sắp diễn ra</div>
-								</div>
+								<h3 className="session-title">Cấu trúc dữ liệu</h3>
+								<div className="session-status status-upcoming">Sắp diễn ra</div>
 							</div>
 
 							<div className="session-info">
