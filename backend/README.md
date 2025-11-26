@@ -1,3 +1,14 @@
+**Cài đặt nest-cli trước đã**
+npm i -g @nestjs/cli
+
+**Hướng dấn sử dụng con mèo NestJS**
+
+# Bước 1: clone dự án về trước
+
+# Bước 2: cd backend
+
+# Bước 3: npm i
+
 **Cài đặt mySQL**
 
 ## window:
@@ -14,18 +25,9 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 # Làm như file .env.example là được (phải cài Mysql trc đã)
 
-**Cài đặt nest-cli trước đã**
-npm i -g @nestjs/cli
-
-**Hướng dấn sử dụng con mèo NestJS**
-
-# Bước 1: clone dự án về trước
-
-# Bước 2: cd backend
-
-# Bước 3: npm i
-
 **Khởi tạo prisma**
+
+# Bước 0: (nếu có code mới và bạn pull về) npx prisma migrate reset (ấn y)
 
 # Bước 1: npx prisma migrate dev --name init
 
