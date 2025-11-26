@@ -1,10 +1,19 @@
 import '@/styles/login.css';
+import { useNavigate } from 'react-router';
+
 export const LoginPage = () => {
-  return (
-    <div className="login-poster-container">
-      {/* <!-- Background Shapes --> */}
-      <div className="background-shape shape-1"></div>
-      <div className="background-shape shape-2"></div>
+	const navigate = useNavigate();
+
+	const handleLogin = () => {
+		// TODO: Thêm logic xác thực
+		navigate('/findTutor');
+	};
+
+	return (
+		<div className="login-poster-container">
+			{/* <!-- Background Shapes --> */}
+			<div className="background-shape shape-1"></div>
+			<div className="background-shape shape-2"></div>
 
       <div className="login-content">
         {/* <!-- Header --> */}
@@ -99,11 +108,11 @@ export const LoginPage = () => {
                 </a>
               </div>
 
-              <button type="submit" className="login-button">
-                <i className="material-icons">login</i>
-                Đăng nhập
-              </button>
-            </form>
+							<button type="button" className="login-button" onClick={handleLogin}>
+								<i className="material-icons">login</i>
+								Đăng nhập
+							</button>
+						</form>
 
             <div className="divider">
               <div className="divider-line"></div>

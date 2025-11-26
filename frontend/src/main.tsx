@@ -9,36 +9,41 @@ import { MyCourse } from '@/pages/myCourse';
 import { TutorPage } from '@/pages/tutorSchedule';
 import { ProfilePage } from '@/pages/profile';
 import { FeedBackPage } from '@/pages/feedback';
+import TutorCourse from '@/pages/tutorCourse';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <LandingPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: 'findTutor',
-    element: <FindTutorPage />,
-  },
-  {
-    path: 'myCourse',
-    element: <MyCourse />,
-  },
-  {
-    path: 'tutor',
-    element: <TutorPage />,
-  },
-  {
-    path: 'profile',
-    element: <ProfilePage />,
-  },
-  {
-    path: 'feedback',
-    element: <FeedBackPage />,
-  },
+	{
+		path: '/',
+		element: <LandingPage />,
+	},
+	{
+		path: '/login',
+		element: <LoginPage />,
+	},
+	{
+		path: 'findTutor',
+		element: <FindTutorPage />,
+	},
+	{
+		path: 'myCourse',
+		element: <MyCourse />,
+	},
+	{
+		path: 'tutor',
+		element: <TutorPage />,
+	},
+	{
+		path: 'profile',
+		element: <ProfilePage />,
+	},
+	{
+		path: 'feedback',
+		element: <FeedBackPage />,
+	},
+	{
+		path: 'tutorCourse',
+		element: <TutorCourse />,
+	},
 ]);
 
 createRoot(document.getElementById('root')!).render(

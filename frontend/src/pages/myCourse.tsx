@@ -1,28 +1,41 @@
 import '@/styles/myCourse.css';
-export const MyCourse = () => {
-  return (
-    <div className="poster-container">
-      {/* <!-- Background Shapes --> */}
-      <div className="background-shape shape-1"></div>
-      <div className="background-shape shape-2"></div>
-      <div className="background-shape shape-3"></div>
+import { useNavigate } from 'react-router';
 
-      <div className="content">
-        {/* <!-- Header --> */}
-        <header className="header">
-          <div className="logo">
-            <div className="logo-icon">
-              <i className="material-icons">school</i>
-            </div>
-            <div className="logo-text">Tutor Support System</div>
-          </div>
-          <nav className="nav-menu">
-            <div className="nav-item">Trang chủ</div>
-            <div className="nav-item">Tìm tutor</div>
-            <div className="nav-item">Lịch học</div>
-            <div className="nav-item">Tài khoản</div>
-          </nav>
-        </header>
+export const MyCourse = () => {
+	const navigate = useNavigate();
+
+	return (
+		<>
+			<div className="poster-container">
+				{/* <!-- Background Shapes --> */}
+				<div className="background-shape shape-1"></div>
+				<div className="background-shape shape-2"></div>
+				<div className="background-shape shape-3"></div>
+
+				<div className="content">
+					{/* <!-- Header --> */}
+					<header className="header">
+						<div className="logo">
+							<div className="logo-icon">
+								<i className="material-icons">school</i>
+							</div>
+							<div className="logo-text">Tutor Support System</div>
+						</div>
+						<nav className="nav-menu">
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/findTutor')}>
+								Tìm tutor
+							</button>
+							<button className="nav-item" onClick={() => navigate('/myCourse')}>
+								Lịch học
+							</button>
+							<button className="nav-item" onClick={() => navigate('/profile')}>
+								Tài khoản
+							</button>
+						</nav>
+					</header>
 
         {/* <!-- Page Title --> */}
         <h1 className="page-title">Lịch học của tôi</h1>
@@ -263,17 +276,17 @@ export const MyCourse = () => {
               </div>
             </div>
 
-            <div className="session-actions">
-              <button className="session-button download-button">
-                <i className="material-icons">download</i>
-                Tải tài liệu
-              </button>
-              <button className="session-button rate-button">
-                <i className="material-icons">star</i>
-                Đánh giá buổi học
-              </button>
-            </div>
-          </div>
+							<div className="session-actions">
+								<button className="session-button download-button">
+									<i className="material-icons">download</i>
+									Tải tài liệu
+								</button>
+								<button className="session-button rate-button" onClick={() => navigate('/feedback')}>
+									<i className="material-icons">star</i>
+									Đánh giá buổi học
+								</button>
+							</div>
+						</div>
 
           {/* <!-- Session Card 3 - Upcoming --> */}
           <div className="session-card">

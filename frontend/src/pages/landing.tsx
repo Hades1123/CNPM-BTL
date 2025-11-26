@@ -1,44 +1,55 @@
 import '@/styles/landing.css';
+import { useNavigate } from 'react-router';
+
 export const LandingPage = () => {
-  return (
-    <>
-      <div className="poster-container">
-        {/* <!-- Background Shapes --> */}
-        <div className="background-shape shape-1"></div>
-        <div className="background-shape shape-2"></div>
-        <div className="background-shape shape-3"></div>
+	const navigate = useNavigate();
 
-        <div className="content">
-          {/* <!-- Header --> */}
-          <header className="header">
-            <div className="logo">
-              <div className="logo-icon">
-                <i className="material-icons">school</i>
-              </div>
-              <div className="logo-text">Tutor Support System</div>
-            </div>
-            <nav className="nav-menu">
-              <div className="nav-item">Trang chủ</div>
-              <div className="nav-item">Tính năng</div>
-              <div className="nav-item">Lợi ích</div>
-              <div className="nav-item">Liên hệ</div>
-            </nav>
-          </header>
+	return (
+		<>
+			<div className="poster-container">
+				{/* <!-- Background Shapes --> */}
+				<div className="background-shape shape-1"></div>
+				<div className="background-shape shape-2"></div>
+				<div className="background-shape shape-3"></div>
 
-          {/* <!-- Hero Section --> */}
-          <section className="hero">
-            <h1 className="hero-title">Hệ thống Hỗ trợ Tutor/Mentor</h1>
-            <p className="hero-subtitle">
-              Nền tảng kỹ thuật số hiện đại và tập trung, giúp quản lý và vận hành hiệu quả chương trình Tutor/Mentor
-              tại Trường Đại học Bách Khoa Thành phố Hồ Chí Minh
-            </p>
-            <img
-              src="https://sfile.chatglm.cn/images-ppt/5964e2578c33.jpg"
-              alt="Sinh viên và Tutor"
-              className="hero-image"
-            />
-            <button className="cta-button">Bắt đầu ngay</button>
-          </section>
+				<div className="content">
+					{/* <!-- Header --> */}
+					<header className="header">
+						<div className="logo">
+							<div className="logo-icon">
+								<i className="material-icons">school</i>
+							</div>
+							<div className="logo-text">Tutor Support System</div>
+						</div>
+						<nav className="nav-menu">
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/login')}>
+								Đăng nhập
+							</button>
+							<button className="nav-item" onClick={() => navigate('/feedback')}>
+								Liên hệ
+							</button>
+						</nav>
+					</header>
+
+					{/* <!-- Hero Section --> */}
+					<section className="hero">
+						<h1 className="hero-title">Hệ thống Hỗ trợ Tutor/Mentor</h1>
+						<p className="hero-subtitle">
+							Nền tảng kỹ thuật số hiện đại và tập trung, giúp quản lý và vận hành hiệu quả chương trình Tutor/Mentor
+							tại Trường Đại học Bách Khoa Thành phố Hồ Chí Minh
+						</p>
+						<img
+							src="https://sfile.chatglm.cn/images-ppt/5964e2578c33.jpg"
+							alt="Sinh viên và Tutor"
+							className="hero-image"
+						/>
+						<button className="cta-button" onClick={() => navigate('/login')}>
+							Bắt đầu ngay
+						</button>
+					</section>
 
           {/* <!-- Features Section --> */}
           <section className="section">
