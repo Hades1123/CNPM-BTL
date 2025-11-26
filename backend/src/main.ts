@@ -1,8 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    const config = new DocumentBuilder()
+        .setTitle('CNPM Backend API')
+        .setDescription('API documentation for CNPM project backend services')
+        .setVersion('1.0.0')
+        .addTag('Authentication')
+        .addTag('Users')
+        .addBearerAuth()
+        .build();
+    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, documentFactory);
+    SwaggerModule.setup('swagger', app, documentFactory, {
+        jsonDocumentUrl: 'swagger/json',
+    });
+
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
