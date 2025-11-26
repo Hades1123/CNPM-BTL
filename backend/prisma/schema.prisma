@@ -1,0 +1,87 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+} 
+
+enum UserRole{
+  STUDENT
+  TUTOR
+  ADMIN
+}
+
+enum RegistrationStatus{
+  REGISTERED
+  CANCELLED
+  COMPLETED
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+
+  // Các trường tích hợp
+  password String
+  mssv String? @unique // From datacore
+  name String  // from datacore
+  faculty String // from datacore
+  role UserRole @default(STUDENT) 
+
+  //relation
+  createdSessions Session[]
+  registrations Registration[]
+
+  @@map("users")
+}
+
+model Session{
+  id Int @id @default(autoincrement())
+  title String 
+  description String?
+  startTime DateTime
+  endTime DateTime
+  location String?
+  maxStudents Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //relation
+  tutorId Int
+  tutor User @relation(fields: [tutorId], references: [id])
+
+  registrations Registration[]
+  materials Material[]
+  @@map("sessions")
+}
+
+model Registration{
+  id Int @id @default(autoincrement())
+  status RegistrationStatus @default(REGISTERED)
+  registeredAt DateTime @default(now())
+
+  studentId Int
+  student User @relation(fields: [studentId], references: [id])
+
+  sessionId Int
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, sessionId])
+  @@map("registrations")
+}
+
+model Material {
+  id Int @id @default(autoincrement())
+  fileName String 
+  fileUrl String 
+  createdAt DateTime @default(now())
+
+  sessionId Int
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("materials")
+}
