@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-dist
-node_modules
-/src/generated/*
-.sql
-.env
-=======
 # compiled output
 /dist
 /node_modules
@@ -63,5 +56,4 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /src/generated/prisma
->>>>>>> a0e0802b601beefed01284fcca6ad22d6dc6eb82
 *.sql
