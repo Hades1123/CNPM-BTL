@@ -1,5 +1,9 @@
 import '@/styles/landing.css';
+import { useNavigate } from 'react-router';
+
 export const LandingPage = () => {
+	const navigate = useNavigate();
+
 	return (
 		<>
 			<div className="poster-container">
@@ -18,10 +22,15 @@ export const LandingPage = () => {
 							<div className="logo-text">Tutor Support System</div>
 						</div>
 						<nav className="nav-menu">
-							<div className="nav-item">Trang chủ</div>
-							<div className="nav-item">Tính năng</div>
-							<div className="nav-item">Lợi ích</div>
-							<div className="nav-item">Liên hệ</div>
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/login')}>
+								Đăng nhập
+							</button>
+							<button className="nav-item" onClick={() => navigate('/feedback')}>
+								Liên hệ
+							</button>
 						</nav>
 					</header>
 
@@ -37,7 +46,9 @@ export const LandingPage = () => {
 							alt="Sinh viên và Tutor"
 							className="hero-image"
 						/>
-						<button className="cta-button">Bắt đầu ngay</button>
+						<button className="cta-button" onClick={() => navigate('/login')}>
+							Bắt đầu ngay
+						</button>
 					</section>
 
 					{/* <!-- Features Section --> */}

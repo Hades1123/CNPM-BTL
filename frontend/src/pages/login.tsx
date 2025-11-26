@@ -1,5 +1,14 @@
 import '@/styles/login.css';
+import { useNavigate } from 'react-router';
+
 export const LoginPage = () => {
+	const navigate = useNavigate();
+
+	const handleLogin = () => {
+		// TODO: Thêm logic xác thực
+		navigate('/findTutor');
+	};
+
 	return (
 		<div className="login-poster-container">
 			{/* <!-- Background Shapes --> */}
@@ -99,7 +108,7 @@ export const LoginPage = () => {
 								</a>
 							</div>
 
-							<button type="submit" className="login-button">
+							<button type="button" className="login-button" onClick={handleLogin}>
 								<i className="material-icons">login</i>
 								Đăng nhập
 							</button>

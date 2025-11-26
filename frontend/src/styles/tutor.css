@@ -519,3 +519,65 @@
 }
 
 /* Footer moved to global.css */
+/* Nút thêm lịch to đẹp ở Header */
+.btn-primary-action {
+	background-color: #0056b3;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	box-shadow: 0 4px 10px rgba(0, 86, 179, 0.2);
+	transition: all 0.2s;
+}
+
+.btn-primary-action:hover {
+	background-color: #004494;
+	transform: translateY(-2px);
+}
+
+/* Style cho Checkbox chọn ngày (Dạng nút bấm) */
+.weekday-checkbox-item {
+	cursor: pointer;
+	position: relative;
+}
+
+.weekday-checkbox-item input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.weekday-checkbox-item .checkmark {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 40px;
+	height: 40px;
+	background-color: #f0f2f5;
+	border: 1px solid #ddd;
+	border-radius: 50%; /* Hình tròn */
+	font-size: 13px;
+	font-weight: 600;
+	color: #555;
+	transition: all 0.2s;
+}
+
+/* Khi được chọn */
+.weekday-checkbox-item input:checked ~ .checkmark {
+	background-color: #0056b3;
+	color: white;
+	border-color: #0056b3;
+}
+
+.weekday-checkbox-item:hover .checkmark {
+	border-color: #0056b3;
+}
+
+/* --- Tận dụng lại CSS Modal của trang Course --- */
+/* (Nếu bạn chưa gộp CSS, hãy copy đoạn .modal-overlay, .modal-content... 
+    từ tutorCourse.css sang đây hoặc tạo file css chung) */

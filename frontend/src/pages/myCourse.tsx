@@ -1,5 +1,9 @@
 import '@/styles/myCourse.css';
+import { useNavigate } from 'react-router';
+
 export const MyCourse = () => {
+	const navigate = useNavigate();
+
 	return (
 		<>
 			<div className="poster-container">
@@ -18,10 +22,18 @@ export const MyCourse = () => {
 							<div className="logo-text">Tutor Support System</div>
 						</div>
 						<nav className="nav-menu">
-							<div className="nav-item">Trang chủ</div>
-							<div className="nav-item">Tìm tutor</div>
-							<div className="nav-item">Lịch học</div>
-							<div className="nav-item">Tài khoản</div>
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/findTutor')}>
+								Tìm tutor
+							</button>
+							<button className="nav-item" onClick={() => navigate('/myCourse')}>
+								Lịch học
+							</button>
+							<button className="nav-item" onClick={() => navigate('/profile')}>
+								Tài khoản
+							</button>
 						</nav>
 					</header>
 
@@ -269,7 +281,7 @@ export const MyCourse = () => {
 									<i className="material-icons">download</i>
 									Tải tài liệu
 								</button>
-								<button className="session-button rate-button">
+								<button className="session-button rate-button" onClick={() => navigate('/feedback')}>
 									<i className="material-icons">star</i>
 									Đánh giá buổi học
 								</button>

@@ -1,5 +1,9 @@
 import '@/styles/profile.css';
+import { useNavigate } from 'react-router';
+
 export const ProfilePage = () => {
+	const navigate = useNavigate();
+
 	return (
 		<>
 			<div className="profile-poster-container">
@@ -18,10 +22,18 @@ export const ProfilePage = () => {
 							<div className="logo-text">Tutor Support System</div>
 						</div>
 						<nav className="nav-menu">
-							<div className="nav-item">Trang chủ</div>
-							<div className="nav-item">Tìm tutor</div>
-							<div className="nav-item">Lịch học</div>
-							<div className="nav-item">Tài khoản</div>
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/findTutor')}>
+								Tìm tutor
+							</button>
+							<button className="nav-item" onClick={() => navigate('/myCourse')}>
+								Lịch học
+							</button>
+							<button className="nav-item" onClick={() => navigate('/profile')}>
+								Tài khoản
+							</button>
 						</nav>
 					</header>
 

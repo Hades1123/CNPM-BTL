@@ -1,6 +1,10 @@
 import '@/styles/tutor.css';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 export const TutorPage = () => {
+	const navigate = useNavigate();
+	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	return (
 		<>
 			<div className="poster-container">
@@ -19,15 +23,35 @@ export const TutorPage = () => {
 							<div className="logo-text">Tutor Support System</div>
 						</div>
 						<nav className="nav-menu">
-							<div className="nav-item">Trang chủ</div>
-							<div className="nav-item">Lịch của tôi</div>
-							<div className="nav-item">Buổi học</div>
-							<div className="nav-item">Tài khoản</div>
+							<button className="nav-item" onClick={() => navigate('/')}>
+								Trang chủ
+							</button>
+							<button className="nav-item" onClick={() => navigate('/tutor')}>
+								Lịch của tôi
+							</button>
+							<button className="nav-item" onClick={() => navigate('/tutorCourse')}>
+								Buổi học
+							</button>
+							<button className="nav-item" onClick={() => navigate('/profile')}>
+								Tài khoản
+							</button>
 						</nav>
 					</header>
 
 					{/* <!-- Page Title --> */}
-					<h1 className="page-title">Thiết lập Lịch rảnh</h1>
+					<div
+						className="page-header-row"
+						style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '30px 0' }}
+					>
+						<h1 className="page-title" style={{ margin: 0 }}>
+							Quản lý Lịch biểu
+						</h1>
+
+						{/* Nút mở Modal */}
+						<button className="btn-primary-action" onClick={() => setIsAddModalOpen(true)}>
+							<i className="material-icons">add_circle</i> Thêm lịch rảnh
+						</button>
+					</div>
 
 					{/* <!-- Simple Calendar Section --> */}
 					<section className="calendar-section">
@@ -168,84 +192,6 @@ export const TutorPage = () => {
 							</div>
 						</div>
 					</section>
-
-					{/* <!-- Add Availability Section --> */}
-					<section className="add-availability-section">
-						<h2 className="section-title">Thêm lịch rảnh định kỳ</h2>
-
-						<div className="form-row">
-							<div className="form-group">
-								<label className="form-label">Từ ngày</label>
-								<input type="date" className="form-input" />
-							</div>
-							<div className="form-group">
-								<label className="form-label">Đến ngày</label>
-								<input type="date" className="form-input" />
-							</div>
-						</div>
-
-						<div className="form-group">
-							<label className="form-label">Lặp lại vào các ngày</label>
-							<div className="weekdays-selector">
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="monday" />
-									<label htmlFor="monday">Thứ 2</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="tuesday" />
-									<label htmlFor="tuesday">Thứ 3</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="wednesday" />
-									<label htmlFor="wednesday">Thứ 4</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="thursday" />
-									<label htmlFor="thursday">Thứ 5</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="friday" />
-									<label htmlFor="friday">Thứ 6</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="saturday" />
-									<label htmlFor="saturday">Thứ 7</label>
-								</div>
-								<div className="weekday-checkbox">
-									<input type="checkbox" id="sunday" />
-									<label htmlFor="sunday">CN</label>
-								</div>
-							</div>
-						</div>
-
-						<div className="form-row">
-							<div className="form-group">
-								<label className="form-label">Thời gian bắt đầu</label>
-								<input type="time" className="form-input" />
-							</div>
-							<div className="form-group">
-								<label className="form-label">Thời gian kết thúc</label>
-								<input type="time" className="form-input" />
-							</div>
-						</div>
-
-						<div className="form-group">
-							<label className="form-label">Số lượng sinh viên tối đa</label>
-							<select className="form-select">
-								<option>1 sinh viên</option>
-								<option>2 sinh viên</option>
-								<option>3 sinh viên</option>
-								<option>4 sinh viên</option>
-								<option>5 sinh viên</option>
-							</select>
-						</div>
-
-						<div className="form-actions">
-							<button className="form-button secondary-button">Hủy</button>
-							<button className="form-button primary-button">Thêm lịch rảnh</button>
-						</div>
-					</section>
-
 					{/* <!-- Session Requests Section --> */}
 					<section className="session-requests-section">
 						<h2 className="section-title">Yêu cầu buổi học mới</h2>
@@ -370,6 +316,81 @@ export const TutorPage = () => {
 					</footer>
 				</div>
 			</div>
+			{isAddModalOpen && (
+				<div className="modal-overlay">
+					<div className="modal-content" style={{ maxWidth: '600px' }}>
+						<div className="modal-header">
+							<h2>Thiết lập lịch rảnh mới</h2>
+							<button className="close-btn" onClick={() => setIsAddModalOpen(false)}>
+								&times;
+							</button>
+						</div>
+
+						<div className="modal-body">
+							{/* Copy form cũ vào đây và chỉnh lại CSS chút cho gọn */}
+
+							<div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+								<div className="form-group" style={{ flex: 1 }}>
+									<label className="form-label">Từ ngày</label>
+									<input type="date" className="form-input" />
+								</div>
+								<div className="form-group" style={{ flex: 1 }}>
+									<label className="form-label">Đến ngày</label>
+									<input type="date" className="form-input" />
+								</div>
+							</div>
+
+							<div className="form-group" style={{ marginBottom: '15px' }}>
+								<label className="form-label">Lặp lại vào các ngày</label>
+								<div className="weekdays-selector" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+									{/* Checkbox rút gọn */}
+									{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((day, index) => (
+										<label key={index} className="weekday-checkbox-item">
+											<input type="checkbox" />
+											<span className="checkmark">{day}</span>
+										</label>
+									))}
+								</div>
+							</div>
+
+							<div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+								<div className="form-group" style={{ flex: 1 }}>
+									<label className="form-label">Bắt đầu</label>
+									<input type="time" className="form-input" />
+								</div>
+								<div className="form-group" style={{ flex: 1 }}>
+									<label className="form-label">Kết thúc</label>
+									<input type="time" className="form-input" />
+								</div>
+							</div>
+
+							<div className="form-group">
+								<label className="form-label">Số lượng sinh viên tối đa</label>
+								<select className="form-select form-input">
+									<option>1 sinh viên</option>
+									<option>2 sinh viên</option>
+									<option>3-5 sinh viên (Nhóm)</option>
+								</select>
+							</div>
+						</div>
+
+						<div className="modal-footer">
+							<button className="btn btn-cancel" onClick={() => setIsAddModalOpen(false)}>
+								Hủy bỏ
+							</button>
+							<button
+								className="btn btn-save"
+								onClick={() => {
+									alert('Đã thêm lịch!');
+									setIsAddModalOpen(false);
+								}}
+							>
+								Lưu lịch rảnh
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</>
 	);
 };

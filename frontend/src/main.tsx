@@ -9,6 +9,7 @@ import { MyCourse } from '@/pages/myCourse';
 import { TutorPage } from '@/pages/tutorSchedule';
 import { ProfilePage } from '@/pages/profile';
 import { FeedBackPage } from '@/pages/feedback';
+import TutorCourse from '@/pages/tutorCourse';
 
 const router = createBrowserRouter([
 	{
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
 	{
 		path: 'feedback',
 		element: <FeedBackPage />,
+	},
+	{
+		path: 'tutorCourse',
+		element: <TutorCourse />,
 	},
 ]);
 
