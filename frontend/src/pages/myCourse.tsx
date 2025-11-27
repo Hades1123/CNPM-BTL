@@ -33,6 +33,16 @@ export const MyCourse = () => {
             <button className="nav-item" onClick={() => navigate('/profile')}>
               Tài khoản
             </button>
+            <button
+              className="nav-item logout-btn"
+              onClick={() => {
+                localStorage.removeItem('user');
+                localStorage.removeItem('access_token');
+                navigate('/');
+              }}
+            >
+              Đăng xuất
+            </button>
           </nav>
         </header>
 

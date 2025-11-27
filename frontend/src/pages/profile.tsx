@@ -1,41 +1,70 @@
 import '@/styles/profile.css';
+import { useEffect, useState } from 'react'; // 1. Import Hooks
 import { useNavigate } from 'react-router';
-
 export const ProfilePage = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
-	return (
-		<>
-			<div className="profile-poster-container">
-				{/* <!-- Background Shapes --> */}
-				<div className="background-shape shape-1"></div>
-				<div className="background-shape shape-2"></div>
-				<div className="background-shape shape-3"></div>
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
 
-				<div className="profile-content">
-					{/* <!-- Header --> */}
-					<header className="header">
-						<div className="logo">
-							<div className="logo-icon">
-								<i className="material-icons">school</i>
-							</div>
-							<div className="logo-text">Tutor Support System</div>
-						</div>
-						<nav className="nav-menu">
-							<button className="nav-item" onClick={() => navigate('/')}>
-								Trang chủ
-							</button>
-							<button className="nav-item" onClick={() => navigate('/findTutor')}>
-								Tìm tutor
-							</button>
-							<button className="nav-item" onClick={() => navigate('/myCourse')}>
-								Lịch học
-							</button>
-							<button className="nav-item" onClick={() => navigate('/profile')}>
-								Tài khoản
-							</button>
-						</nav>
-					</header>
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      alert('Bạn chưa đăng nhập!');
+      navigate('/');
+    }
+  }, [navigate]);
+
+  if (!user) return null;
+  return (
+    <>
+      <div className="profile-poster-container">
+        {/* <!-- Background Shapes --> */}
+        <div className="background-shape shape-1"></div>
+        <div className="background-shape shape-2"></div>
+        <div className="background-shape shape-3"></div>
+
+        <div className="profile-content">
+          {/* <!-- Header --> */}
+          <header className="header">
+            <div className="logo">
+              <div className="logo-icon">
+                <i className="material-icons">school</i>
+              </div>
+              <div className="logo-text">Tutor Support System</div>
+            </div>
+            <nav className="nav-menu">
+              <button className="nav-item" onClick={() => navigate('/')}>
+                Trang chủ
+              </button>
+              <button
+                className="nav-item"
+                onClick={() => (user.role === 'STUDENT' ? navigate('/findTutor') : navigate('/tutor'))}
+              >
+                {user.role === 'STUDENT' ? 'Tìm tutor' : 'Lịch của tôi'}
+              </button>
+              <button
+                className="nav-item"
+                onClick={() => (user.role === 'STUDENT' ? navigate('/myCourse') : navigate('/tutorCourse'))}
+              >
+                {user.role === 'STUDENT' ? 'Lịch học' : 'Quản lý buổi học'}
+              </button>
+              <button className="nav-item" onClick={() => navigate('/profile')}>
+                Tài khoản
+              </button>
+              <button
+                className="nav-item logout-btn"
+                onClick={() => {
+                  localStorage.removeItem('user');
+                  localStorage.removeItem('access_token');
+                  navigate('/');
+                }}
+              >
+                Đăng xuất
+              </button>
+            </nav>
+          </header>
 
           {/* <!-- Page Title --> */}
           <h1 className="page-title">Thông tin cá nhân</h1>
@@ -43,27 +72,47 @@ export const ProfilePage = () => {
           {/* <!-- Profile Section --> */}
           <section className="profile-section">
             <div className="profile-header">
-              <div className="profile-avatar">NV</div>
-              <div className="profile-info">
-                <h2 className="profile-name">Nguyễn Văn An</h2>
-                <div className="profile-id">MSSV: 2212719</div>
-                <div className="profile-role">Sinh viên</div>
+              {/* Avatar lấy 2 chữ cái đầu của tên */}
+              <div className="profile-avatar">
+                {user.name
+                  ? user.name
+                      .split(' ')
+                      .slice(-2)
+                      .map((word: any) => word[0])
+                      .join('')
+                  : 'U'}
               </div>
+
+              <div className="profile-info">
+                {/* HIỂN THỊ TÊN TỪ STATE */}
+                <h2 className="profile-name">{user.name}</h2>
+
+                {/* MSSV (Có thể null nếu là Tutor/Admin, nên check) */}
+                {user.mssv && <div className="profile-id">MSSV: {user.mssv}</div>}
+
+                {/* Role (Convert từ tiếng Anh sang Việt) */}
+                <div className="profile-role">
+                  {user.role === 'STUDENT' ? 'Sinh viên' : user.role === 'TUTOR' ? 'Gia sư' : 'Admin'}
+                </div>
+              </div>
+
               <button className="edit-button">
-                <i className="material-icons">edit</i>
-                Chỉnh sửa
+                <i className="material-icons">edit</i> Chỉnh sửa
               </button>
             </div>
 
             <div className="info-grid">
               <div className="info-item">
                 <div className="info-label">Email</div>
-                <div className="info-value">nguyenvana@hcmut.edu.vn</div>
+                <div className="info-value">{user.email || 'Chưa cập nhật'}</div>
               </div>
               <div className="info-item">
                 <div className="info-label">Khoa</div>
-                <div className="info-value">Khoa Khoa học và Kỹ thuật Máy tính</div>
+                <div className="info-value">{user.faculty || 'Chưa cập nhật'}</div>
               </div>
+
+              {/* Các thông tin dưới đây chưa có trong User model (DB), 
+                  tạm thời để cứng hoặc ẩn đi nếu chưa muốn show */}
               <div className="info-item">
                 <div className="info-label">Lớp</div>
                 <div className="info-value">K2022 - Lớp KTPM02</div>
