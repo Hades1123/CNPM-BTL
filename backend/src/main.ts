@@ -8,7 +8,9 @@ async function bootstrap() {
 
     // Apply global exception filter
     app.useGlobalFilters(new AllExceptionsFilter());
-
+    // Accept cors policy
+    app.enableCors();
+    // Establish swagger document
     const config = new DocumentBuilder()
         .setTitle('CNPM Backend API')
         .setDescription('API documentation for CNPM project backend services')
@@ -23,4 +25,5 @@ async function bootstrap() {
 
     await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();

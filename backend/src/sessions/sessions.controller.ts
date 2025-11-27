@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus, Param, Post, Request, UseFilters } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param, Post, Delete, Request, UseFilters } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
@@ -31,6 +31,19 @@ export class SessionsController {
     async registerSession(@Param('id') sessionId: number, @Request() req) {
         const { sub } = req.user; // Lấy user ID từ JWT token
         const result = await this.sessionsService.registerForSession(+sessionId, sub as number);
+
+        return {
+            success: true,
+            message: result.message,
+            data: result.registration,
+        };
+    }
+
+    @Delete(':id/register')
+    @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
+    async cancelRegistration(@Param('id') sessionId: number, @Request() req) {
+        const { sub } = req.user; // Lấy user ID từ JWT token
+        const result = await this.sessionsService.cancelRegistration(+sessionId, sub as number);
 
         return {
             success: true,

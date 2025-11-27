@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '@/database/database.service';
 import {
     SessionNotFoundException,
     AlreadyRegisteredException,
     SessionFullException,
     SessionExpiredException,
+    RegistrationNotFoundException,
+    CannotCancelPastSessionException,
 } from '@/common/exceptions/session.exceptions';
 
 @Injectable()
@@ -148,6 +150,89 @@ export class SessionsService {
             return {
                 message: 'Successfully registered for session',
                 registration,
+            };
+        });
+    }
+
+    async cancelRegistration(sessionId: number, studentId: number) {
+        return this.prisma.$transaction(async (tx) => {
+            // 1. Check session exists and get timing info
+            const session = await tx.session.findUnique({
+                where: { id: sessionId },
+                select: {
+                    id: true,
+                    title: true,
+                    startTime: true,
+                    endTime: true
+                }
+            });
+
+            if (!session) {
+                throw new SessionNotFoundException();
+            }
+
+            // 2. Check if registration exists
+            const registration = await tx.registration.findUnique({
+                where: {
+                    studentId_sessionId: {
+                        studentId,
+                        sessionId,
+                    },
+                },
+                select: {
+                    id: true,
+                    status: true
+                }
+            });
+
+            if (!registration) {
+                throw new RegistrationNotFoundException();
+            }
+
+            // 3. Check if registration is already cancelled
+            if (registration.status === 'CANCELLED') {
+                throw new HttpException('Registration already cancelled', HttpStatus.CONFLICT);
+            }
+
+            // 4. Check if session has started (prevent cancellation of ongoing/past sessions)
+            if (new Date(session.startTime) <= new Date()) {
+                throw new CannotCancelPastSessionException();
+            }
+
+            // 5. Update registration status to CANCELLED
+            const updatedRegistration = await tx.registration.update({
+                where: {
+                    studentId_sessionId: {
+                        studentId,
+                        sessionId,
+                    },
+                },
+                data: {
+                    status: 'CANCELLED',
+                },
+                include: {
+                    student: {
+                        select: {
+                            id: true,
+                            username: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                    session: {
+                        select: {
+                            id: true,
+                            title: true,
+                            startTime: true,
+                            endTime: true,
+                        },
+                    },
+                },
+            });
+
+            return {
+                message: 'Registration cancelled successfully',
+                registration: updatedRegistration,
             };
         });
     }

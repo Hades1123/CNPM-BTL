@@ -23,3 +23,15 @@ export class SessionExpiredException extends HttpException {
     super('Cannot register for past sessions', HttpStatus.CONFLICT);
   }
 }
+
+export class RegistrationNotFoundException extends HttpException {
+  constructor() {
+    super('Registration not found', HttpStatus.NOT_FOUND);
+  }
+}
+
+export class CannotCancelPastSessionException extends HttpException {
+  constructor() {
+    super('Cannot cancel registration for past sessions', HttpStatus.CONFLICT);
+  }
+}
