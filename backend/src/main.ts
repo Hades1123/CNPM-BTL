@@ -8,8 +8,6 @@ async function bootstrap() {
         .setTitle('CNPM Backend API')
         .setDescription('API documentation for CNPM project backend services')
         .setVersion('1.0.0')
-        .addTag('Authentication')
-        .addTag('Users')
         .addBearerAuth()
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);

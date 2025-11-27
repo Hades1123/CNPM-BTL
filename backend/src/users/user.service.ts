@@ -1,4 +1,4 @@
-import { PrismaService } from '@/database/prisma.service';
+import { PrismaService } from '@/database/database.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
