@@ -4,6 +4,7 @@ import { MaterialService } from './material.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
 import { CreateMaterialDto } from './dto/create-material.dto';
+import { CreateMaterialApiDoc, GetMaterialsBySessionApiDoc } from './docs/materials.api.docs';
 
 @ApiTags('Materials')
 @ApiBearerAuth()
@@ -13,8 +14,7 @@ export class MaterialController {
     constructor(private readonly materialService: MaterialService) {}
 
     @Post('sessions/:sessionId')
-    @ApiParam({ name: 'sessionId', type: 'number', description: 'Session ID' })
-    @ApiBody({ type: CreateMaterialDto })
+    @CreateMaterialApiDoc()
     async createMaterial(@Param('sessionId') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user; // tutor ID
         const { fileName, fileUrl } = req.body;
@@ -29,7 +29,7 @@ export class MaterialController {
     }
 
     @Get('sessions/:sessionId')
-    @ApiParam({ name: 'sessionId', type: 'number', description: 'Session ID' })
+    @GetMaterialsBySessionApiDoc()
     async getMaterialsBySession(@Param('sessionId') sessionId: number): Promise<ApiResponse<any>> {
         const materials = await this.materialService.getMaterialsBySession(+sessionId);
 
