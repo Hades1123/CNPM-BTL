@@ -26,7 +26,7 @@ export const LoginPage = () => {
     confirmPassword: '',
     username: '',
     mssv: '',
-    role: '',
+    role: 'STUDENT',
   });
   const [isLogin, setIsLogin] = useState(true);
   const [errors, setErrors] = useState<any>({});
@@ -113,7 +113,7 @@ export const LoginPage = () => {
         username: form.username,
         email: form.email,
         password: form.password,
-        mssv: form.mssv,
+        mssv: String(form.mssv),
         name: form.name,
         role: form.role,
         faculty: 'Bách Khoa',

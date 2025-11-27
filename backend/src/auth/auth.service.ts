@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '@/users/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { RegisterDto } from './dto/register.dto';
 import { ApiResponse } from '@/types/global';
 
 @Injectable()
@@ -24,5 +25,8 @@ export class AuthService {
                 role: user.role,
             },
         };
+    }
+    async signUp(registerDto: RegisterDto) {
+        return this.usersService.createUser(registerDto);
     }
 }
