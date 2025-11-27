@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { TutorSessionsService } from './sessions.tutor.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
+import { GetTutorSessionsApiDoc, GetTutorSessionDetailsApiDoc } from './docs/tutor-sessions.api.docs';
 
 @ApiTags('Tutor Sessions')
 @ApiBearerAuth()
@@ -12,6 +13,7 @@ export class TutorSessionsController {
     constructor(private readonly tutorSessionsService: TutorSessionsService) {}
 
     @Get()
+    @GetTutorSessionsApiDoc()
     async getMySessions(@Request() req): Promise<ApiResponse<any>> {
         try {
             const { sub } = req.user; // Lấy tutor ID từ JWT token
@@ -28,7 +30,7 @@ export class TutorSessionsController {
     }
 
     @Get(':id')
-    @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
+    @GetTutorSessionDetailsApiDoc()
     async getSessionDetails(@Param('id') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         try {
             const { sub } = req.user; // Lấy tutor ID từ JWT token
