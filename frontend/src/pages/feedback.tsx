@@ -39,6 +39,7 @@ export const FeedBackPage = () => {
                 onClick={() => {
                   localStorage.removeItem('user');
                   localStorage.removeItem('access_token');
+                  alert('Đăng xuất thành công!');
                   navigate('/');
                 }}
               >

@@ -1,19 +1,164 @@
 import '@/styles/findTutor.css';
 import { useNavigate } from 'react-router';
+import { useEffect, useState, useMemo } from 'react';
 
 export const FindTutorPage = () => {
   const navigate = useNavigate();
 
+  // 1. State lưu danh sách Tutor (để hiển thị thẻ)
+  const [tutors, setTutors] = useState<any[]>([]);
+  // 2. State lưu TOÀN BỘ sessions (để lọc khi bấm vào từng tutor)
+  const [allSessions, setAllSessions] = useState<any[]>([]);
+
+  // 3. State cho Modal
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedTutor, setSelectedTutor] = useState<any>(null); // Tutor đang được chọn
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 4. State cho bộ lọc (Filter)
+  const [searchText, setSearchText] = useState('');
+  const [filterSubject, setFilterSubject] = useState('Tất cả');
+  const [filterFaculty, setFilterFaculty] = useState('Tất cả');
+
+  const uniqueSubjects = useMemo(() => {
+    const subjects = new Set<string>();
+    allSessions.forEach((s) => subjects.add(s.title));
+    return Array.from(subjects);
+  }, [allSessions]);
+
+  useEffect(() => {
+    const fetchTutorsFromSessions = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const token = localStorage.getItem('access_token');
+        const base = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:3000';
+        const res = await fetch(`${base}/sessions`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) throw new Error(`Server error ${res.status}`);
+        const json = await res.json();
+        const sessions = json?.data || [];
+
+        setAllSessions(sessions);
+
+        // --- Xử lý gom nhóm Tutor ---
+        const map = new Map<number, any>();
+
+        (sessions || []).forEach((s: any) => {
+          const studentCountInSession = s._count?.registrations || 0;
+
+          if (!map.has(s.tutor.id)) {
+            map.set(s.tutor.id, {
+              ...s.tutor,
+              totalStudents: studentCountInSession,
+              teachingSubjects: new Set([s.title]), // Lưu các môn ông này dạy
+            });
+          } else {
+            const existingTutor = map.get(s.tutor.id);
+            existingTutor.totalStudents += studentCountInSession;
+            existingTutor.teachingSubjects.add(s.title); // Thêm môn vào set
+            map.set(s.tutor.id, existingTutor);
+          }
+        });
+
+        // Convert Set -> Array cho dễ dùng sau này
+        const tutorsArray = Array.from(map.values()).map((t) => ({
+          ...t,
+          teachingSubjects: Array.from(t.teachingSubjects),
+        }));
+
+        setTutors(tutorsArray);
+      } catch (err: any) {
+        setError(err?.message || 'Lỗi khi lấy dữ liệu');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTutorsFromSessions();
+  }, []);
+  // --- LOGIC LỌC (FILTER) TẠI FE ---
+  const filteredTutors = tutors.filter((tutor) => {
+    // 1. Lọc theo Search Text (Tên hoặc Email)
+    const matchSearch =
+      searchText === '' ||
+      tutor.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      tutor.email.toLowerCase().includes(searchText.toLowerCase());
+
+    // 2. Lọc theo Môn học (Kiểm tra xem tutor có dạy môn đó không)
+    const matchSubject = filterSubject === 'Tất cả' || tutor.teachingSubjects.includes(filterSubject);
+
+    // 3. Lọc theo Khoa (Faculty)
+    const matchFaculty = filterFaculty === 'Tất cả' || tutor.faculty === filterFaculty;
+
+    return matchSearch && matchSubject && matchFaculty;
+  });
+  // ---------------------------------
+
+  // --- Xử lý mở Modal ---
+  const handleOpenModal = (tutor: any) => {
+    setSelectedTutor(tutor);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTutor(null);
+  };
+
+  // --- Lọc các buổi học của Tutor đang chọn ---
+  const tutorSessions = selectedTutor ? allSessions.filter((s) => s.tutor?.id === selectedTutor.id) : [];
+
+  // --- Hàm gọi API Đăng ký ---
+  const handleRegisterSession = async (sessionId: number) => {
+    if (!window.confirm('Bạn có chắc chắn muốn đăng ký buổi học này?')) return;
+
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        alert('Vui lòng đăng nhập để đăng ký!');
+        navigate('/login');
+        return;
+      }
+
+      const base = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:3000';
+
+      // Gọi API POST /sessions/:id/register
+      const res = await fetch(`${base}/sessions/${sessionId}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Đăng ký thành công!');
+        // Optional: Refresh lại list để cập nhật số lượng slot (nếu cần)
+        window.location.reload();
+        handleCloseModal();
+      } else {
+        alert(`Đăng ký thất bại: ${data.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Lỗi kết nối server');
+    }
+  };
+
   return (
     <>
       <div className="poster-container">
-        {/* <!-- Background Shapes --> */}
         <div className="background-shape shape-1"></div>
         <div className="background-shape shape-2"></div>
         <div className="background-shape shape-3"></div>
 
         <div className="content">
-          {/* <!-- Header --> */}
+          {/* ... (Phần Header giữ nguyên) ... */}
           <header className="header">
             <div className="logo">
               <div className="logo-icon">
@@ -39,6 +184,7 @@ export const FindTutorPage = () => {
                 onClick={() => {
                   localStorage.removeItem('user');
                   localStorage.removeItem('access_token');
+                  alert('Đăng xuất thành công!');
                   navigate('/');
                 }}
               >
@@ -47,270 +193,298 @@ export const FindTutorPage = () => {
             </nav>
           </header>
 
-          {/* <!-- Page Title --> */}
           <h1 className="page-title">Tìm kiếm và Đăng ký Tutor</h1>
 
-          {/* <!-- Search Section --> */}
           <section className="search-section">
             <div className="search-bar">
-              <input type="text" className="search-input" placeholder="Tìm kiếm theo tên, môn học..." />
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Tìm kiếm theo tên, email..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)} // Bind State Search
+              />
               <button className="search-button">
                 <i className="material-icons">search</i>
-                Tìm kiếm
               </button>
             </div>
 
             <div className="filter-section">
               <div className="filter-group">
                 <label className="filter-label">Môn học</label>
-                <select className="filter-select">
-                  <option>Tất cả</option>
-                  <option>Toán cao cấp</option>
-                  <option>Lập trình cơ bản</option>
-                  <option>Cấu trúc dữ liệu</option>
-                  <option>Kỹ thuật phần mềm</option>
-                  <option>Trí tuệ nhân tạo</option>
+                <select
+                  className="filter-select"
+                  value={filterSubject}
+                  onChange={(e) => setFilterSubject(e.target.value)} // Bind State Subject
+                >
+                  <option value="Tất cả">Tất cả</option>
+                  {/* Render danh sách môn học động từ dữ liệu thật */}
+                  {uniqueSubjects.map((sub) => (
+                    <option key={sub} value={sub}>
+                      {sub}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="filter-group">
-                <label className="filter-label">Chuyên môn</label>
-                <select className="filter-select">
-                  <option>Tất cả</option>
-                  <option>Khoa học máy tính</option>
-                  <option>Kỹ thuật phần mềm</option>
-                  <option>Hệ thống thông tin</option>
-                  <option>Mạng máy tính</option>
+                <label className="filter-label">Khoa / Chuyên môn</label>
+                <select
+                  className="filter-select"
+                  value={filterFaculty}
+                  onChange={(e) => setFilterFaculty(e.target.value)} // Bind State Faculty
+                >
+                  <option value="Tất cả">Tất cả</option>
+                  <option value="Khoa học và Kỹ thuật Máy tính">Khoa học máy tính</option>
+                  <option value="Điện - Điện tử">Điện - Điện tử</option>
+                  <option value="Bách Khoa">Bách Khoa</option>
+                  {/* Bạn có thể thêm các khoa khác vào đây */}
                 </select>
               </div>
 
-              <div className="filter-group">
-                <label className="filter-label">Thời gian</label>
-                <select className="filter-select">
-                  <option>Tất cả</option>
-                  <option>Sáng (7h-12h)</option>
-                  <option>Chiều (12h-18h)</option>
-                  <option>Tối (18h-22h)</option>
-                </select>
-              </div>
-
+              {/* Mấy cái filter Thời gian/Đánh giá tạm thời để trưng vì BE chưa hỗ trợ lọc cái này dễ */}
               <div className="filter-group">
                 <label className="filter-label">Đánh giá</label>
                 <select className="filter-select">
                   <option>Tất cả</option>
-                  <option>5 sao</option>
-                  <option>4 sao trở lên</option>
-                  <option>3 sao trở lên</option>
                 </select>
               </div>
             </div>
           </section>
 
-          {/* <!-- Tutor List Section --> */}
+          {/* */}
           <section className="tutor-list-section">
             <div className="section-header">
-              <h2 className="section-title">Danh sách Tutor</h2>
-              <select className="sort-dropdown">
-                <option>Sắp xếp theo: Đánh giá cao nhất</option>
-                <option>Sắp xếp theo: Kinh nghiệm nhiều nhất</option>
-                <option>Sắp xếp theo: Giá thấp nhất</option>
-              </select>
+              <h2 className="section-title">Danh sách Tutor ({filteredTutors.length})</h2>
             </div>
 
-            {/* <!-- Tutor Card 1 --> */}
-            <div className="tutor-card">
-              <img src="https://sfile.chatglm.cn/images-ppt/aa7eaf65d023.jpg" alt="Tutor" className="tutor-avatar" />
-              <div className="tutor-info">
-                <h3 className="tutor-name">Nguyễn Văn An</h3>
-                <div className="tutor-subject">Toán cao cấp, Lập trình cơ bản</div>
-                <p className="tutor-bio">
-                  Có 5 năm kinh nghiệm giảng dạy, chuyên sâu về các môn toán cao cấp và lập trình cơ bản. Phương pháp
-                  giảng dạy rõ ràng, dễ hiểu.
-                </p>
-                <div className="tutor-meta">
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">star</i>
-                    <span>4.8 (32 đánh giá)</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">schedule</i>
-                    <span>5 năm kinh nghiệm</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">people</i>
-                    <span>Đã dạy 120 sinh viên</span>
-                  </div>
-                </div>
-                <div className="tutor-actions">
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button view-profile-btn">Xem hồ sơ</button>
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button book-session-btn">Đăng ký buổi học</button>
-                </div>
-              </div>
-            </div>
+            {loading && <div>Đang tải danh sách tutor...</div>}
+            {error && <div className="error">Lỗi: {error}</div>}
 
-            {/* <!-- Tutor Card 2 --> */}
-            <div className="tutor-card">
-              <img src="https://sfile.chatglm.cn/images-ppt/23a3a1c921c8.jpeg" alt="Tutor" className="tutor-avatar" />
-              <div className="tutor-info">
-                <h3 className="tutor-name">Trần Thị Bình</h3>
-                <div className="tutor-subject">Cấu trúc dữ liệu, Kỹ thuật phần mềm</div>
-                <p className="tutor-bio">
-                  Chuyên gia về cấu trúc dữ liệu và kỹ thuật phần mềm với 7 năm kinh nghiệm. Luôn cập nhật các công nghệ
-                  mới nhất.
-                </p>
-                <div className="tutor-meta">
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">star</i>
-                    <span>4.9 (45 đánh giá)</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">schedule</i>
-                    <span>7 năm kinh nghiệm</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">people</i>
-                    <span>Đã dạy 180 sinh viên</span>
-                  </div>
-                </div>
-                <div className="tutor-actions">
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button view-profile-btn">Xem hồ sơ</button>
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button book-session-btn">Đăng ký buổi học</button>
-                </div>
-              </div>
-            </div>
+            <div
+              className="tutor-grid"
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}
+            >
+              {filteredTutors.length === 0 && !loading && <p>Không tìm thấy Tutor nào phù hợp.</p>}
 
-            {/* <!-- Tutor Card 3 --> */}
-            <div className="tutor-card">
-              <img src="https://sfile.chatglm.cn/images-ppt/a8a24ee0becc.jpg" alt="Tutor" className="tutor-avatar" />
-              <div className="tutor-info">
-                <h3 className="tutor-name">Lê Văn Cường</h3>
-                <div className="tutor-subject">Trí tuệ nhân tạo, Học máy</div>
-                <p className="tutor-bio">
-                  Chuyên gia về trí tuệ nhân tạo và học máy với các dự án thực tế. Giảng dạy kết hợp lý thuyết và thực
-                  hành.
-                </p>
-                <div className="tutor-meta">
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">star</i>
-                    <span>4.7 (28 đánh giá)</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">schedule</i>
-                    <span>4 năm kinh nghiệm</span>
-                  </div>
-                  <div className="tutor-meta-item">
-                    <i className="material-icons">people</i>
-                    <span>Đã dạy 95 sinh viên</span>
+              {/* Render danh sách ĐÃ LỌC */}
+              {filteredTutors.map((tutor) => (
+                <div className="tutor-card" key={tutor.id}>
+                  <img
+                    src={tutor.avatar || 'https://sfile.chatglm.cn/images-ppt/aa7eaf65d023.jpg'}
+                    alt="Tutor"
+                    className="tutor-avatar"
+                  />
+                  <div className="tutor-info">
+                    <h3 className="tutor-name">{tutor.name || tutor.username}</h3>
+                    <div className="tutor-subject">Khoa: {tutor.faculty || 'Chưa cập nhật'}</div>
+                    <p className="tutor-bio">{tutor.email}</p>
+
+                    {/* Hiển thị môn dạy (tùy chọn) */}
+                    <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '5px', fontStyle: 'italic' }}>
+                      Dạy: {tutor.teachingSubjects?.slice(0, 3).join(', ')}
+                      {tutor.teachingSubjects?.length > 3 ? '...' : ''}
+                    </div>
+
+                    <div className="tutor-meta">
+                      <div className="tutor-meta-item">
+                        <i className="material-icons">star</i>
+                        <span>4.8</span>
+                      </div>
+                      <div className="tutor-meta-item">
+                        <i className="material-icons">people</i>
+                        <span>{tutor.totalStudents || 0} HS</span>
+                      </div>
+                    </div>
+                    <div className="tutor-actions">
+                      <button className="tutor-button view-profile-btn">Xem hồ sơ</button>
+                      <button className="tutor-button book-session-btn" onClick={() => handleOpenModal(tutor)}>
+                        Đăng ký buổi học
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div className="tutor-actions">
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button view-profile-btn">Xem hồ sơ</button>
-                  {/* onClick="openModal()" */}
-                  <button className="tutor-button book-session-btn">Đăng ký buổi học</button>
-                </div>
-              </div>
+              ))}
             </div>
           </section>
 
-          {/* <!-- Schedule Section --> */}
-
-          {/* <!-- Footer --> */}
           <footer className="footer">
             <p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
-            <p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH - TRƯƠNG ĐẠI HỌC BÁCH KHOA</p>
           </footer>
         </div>
 
-        {/* <!-- Modal for Tutor Profile and Booking --> */}
-        <div id="tutorModal" className="modal">
-          <div className="modal-content">
-            {/* onClick="closeModal()" */}
-            <button className="modal-close">
-              <i className="material-icons">close</i>
-            </button>
+        {/* */}
+        {isModalOpen && selectedTutor && (
+          <div id="tutorModal" className="modal" style={{ display: 'flex' }}>
+            <div className="modal-content" style={{ maxWidth: '800px' }}>
+              <button className="modal-close" onClick={handleCloseModal}>
+                <i className="material-icons">close</i>
+              </button>
 
-            <h2 className="modal-title">Hồ sơ Tutor & Đăng ký buổi học</h2>
+              <h2 className="modal-title">Lớp học của {selectedTutor.name}</h2>
 
-            <div className="tutor-profile">
-              <img
-                src="https://sfile.chatglm.cn/images-ppt/aa7eaf65d023.jpg"
-                alt="Tutor"
-                className="tutor-profile-avatar"
-              />
-              <div className="tutor-profile-info">
-                <h3 className="tutor-profile-name">Nguyễn Văn An</h3>
-                <div className="tutor-profile-subject">Toán cao cấp, Lập trình cơ bản</div>
-                <div className="tutor-profile-rating">
-                  <div className="rating-stars">
-                    <i className="material-icons">star</i>
-                    <i className="material-icons">star</i>
-                    <i className="material-icons">star</i>
-                    <i className="material-icons">star</i>
-                    <i className="material-icons">star_half</i>
+              <div
+                className="tutor-profile"
+                style={{ borderBottom: '1px solid #eee', paddingBottom: '20px', marginBottom: '20px' }}
+              >
+                <img
+                  src="https://sfile.chatglm.cn/images-ppt/aa7eaf65d023.jpg"
+                  alt="Tutor"
+                  className="tutor-profile-avatar"
+                />
+                <div className="tutor-profile-info">
+                  <h3 className="tutor-profile-name">{selectedTutor.name}</h3>
+                  <div className="tutor-profile-subject">{selectedTutor.email}</div>
+                  <div className="tutor-profile-rating">
+                    <span>Khoa: {selectedTutor.faculty}</span>
                   </div>
-                  <span>4.8 (32 đánh giá)</span>
                 </div>
-                <p className="tutor-profile-bio">
-                  Có 5 năm kinh nghiệm giảng dạy, chuyên sâu về các môn toán cao cấp và lập trình cơ bản. Phương pháp
-                  giảng dạy rõ ràng, dễ hiểu. Tốt nghiệp Đại học Bách Khoa TP.HCM, chuyên ngành Khoa học Máy tính.
-                </p>
+              </div>
+
+              {/* DANH SÁCH SESSION */}
+              <h3 style={{ color: '#0056b3', marginBottom: '15px' }}>Các buổi học đang mở:</h3>
+
+              <div className="session-list-container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                {tutorSessions.length === 0 ? (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#666' }}>
+                    Tutor này hiện chưa có buổi học nào được mở.
+                  </p>
+                ) : (
+                  tutorSessions.map((session: any) => {
+                    // Tính toán slot còn lại (logic dựa trên BE trả về)
+                    // BE trả về: session._count.registrations
+                    const registeredCount = session._count?.registrations || 0;
+                    const availableSlots = session.maxStudents - registeredCount;
+                    const isFull = availableSlots <= 0;
+
+                    const isRegistered = !!session.userRegistration;
+                    let buttonText = 'Đăng ký ngay';
+                    let buttonColor = '#0056b3'; // Xanh
+                    let isDisabled = false;
+
+                    if (isRegistered) {
+                      buttonText = 'Đã đăng ký';
+                      buttonColor = '#2e7d32'; // Xanh lá
+                      isDisabled = true;
+                    } else if (isFull) {
+                      buttonText = 'Hết chỗ';
+                      buttonColor = '#9e9e9e'; // Xám
+                      isDisabled = true;
+                    }
+
+                    return (
+                      <div
+                        key={session.id}
+                        className="session-item-card"
+                        style={{
+                          border: '1px solid #ddd',
+                          borderRadius: '8px',
+                          padding: '15px',
+                          marginBottom: '10px',
+                          backgroundColor: isRegistered ? '#f1f8e9' : '#fff', // Nền xanh nhạt nếu đã đk
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          gap: '10px',
+                        }}
+                      >
+                        <div className="session-info-left">
+                          <h4 style={{ margin: '0 0 5px 0', color: '#333' }}>
+                            {session.title}
+                            {isRegistered && (
+                              <span style={{ fontSize: '0.8em', color: '#2e7d32', marginLeft: '8px' }}>(Của bạn)</span>
+                            )}
+                          </h4>
+                          <div style={{ fontSize: '0.9rem', color: '#666' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              <i className="material-icons" style={{ fontSize: '16px' }}>
+                                event
+                              </i>
+                              {new Date(session.startTime).toLocaleDateString('vi-VN')}
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              <i className="material-icons" style={{ fontSize: '16px' }}>
+                                schedule
+                              </i>
+                              {new Date(session.startTime).toLocaleTimeString('vi-VN', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}{' '}
+                              -
+                              {new Date(session.endTime).toLocaleTimeString('vi-VN', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              <i className="material-icons" style={{ fontSize: '16px' }}>
+                                location_on
+                              </i>
+                              {session.location || 'Online'}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          className="session-info-right"
+                          style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}
+                        >
+                          {/* Badge Slot */}
+                          <div
+                            className={`slot-badge`}
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '15px',
+                              fontSize: '0.85rem',
+                              fontWeight: 'bold',
+                              backgroundColor: isFull && !isRegistered ? '#ffebee' : '#e3f2fd',
+                              color: isFull && !isRegistered ? '#c62828' : '#0277bd',
+                            }}
+                          >
+                            {isFull ? 'Đã đầy' : `Còn ${availableSlots} chỗ`}
+                          </div>
+
+                          {/* Nút Đăng ký / Đã đăng ký */}
+                          <button
+                            onClick={() => handleRegisterSession(session.id)}
+                            disabled={isDisabled}
+                            style={{
+                              padding: '8px 16px',
+                              backgroundColor: buttonColor,
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '5px',
+                              cursor: isDisabled ? 'not-allowed' : 'pointer',
+                              fontWeight: '600',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              opacity: isFull && !isRegistered ? 0.7 : 1,
+                            }}
+                          >
+                            {isRegistered ? (
+                              <i className="material-icons" style={{ fontSize: 18 }}>
+                                check
+                              </i>
+                            ) : null}
+                            {buttonText}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="form-actions" style={{ marginTop: '20px' }}>
+                <button type="button" className="form-button cancel-button" onClick={handleCloseModal}>
+                  Đóng
+                </button>
               </div>
             </div>
-
-            <form className="booking-form">
-              <div className="form-group">
-                <label className="form-label">Chọn môn học</label>
-                <select className="form-select">
-                  <option>Toán cao cấp</option>
-                  <option>Lập trình cơ bản</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Chọn ngày</label>
-                <input type="date" className="form-input" />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Chọn khung giờ</label>
-                <div className="time-slots">
-                  <div className="time-slot">7:00 - 8:00</div>
-                  <div className="time-slot">8:00 - 9:00</div>
-                  <div className="time-slot">9:00 - 10:00</div>
-                  <div className="time-slot">10:00 - 11:00</div>
-                  <div className="time-slot">11:00 - 12:00</div>
-                  <div className="time-slot">13:00 - 14:00</div>
-                  <div className="time-slot">14:00 - 15:00</div>
-                  <div className="time-slot">15:00 - 16:00</div>
-                  <div className="time-slot">16:00 - 17:00</div>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Nội dung cần hỗ trợ</label>
-                <textarea
-                  className="form-textarea"
-                  placeholder="Mô tả ngắn gọn về nội dung bạn cần hỗ trợ..."
-                ></textarea>
-              </div>
-
-              <div className="form-actions">
-                {/* onClick="closeModal()" */}
-                <button type="button" className="form-button cancel-button">
-                  Hủy
-                </button>
-                <button type="submit" className="form-button submit-button">
-                  Đăng ký buổi học
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

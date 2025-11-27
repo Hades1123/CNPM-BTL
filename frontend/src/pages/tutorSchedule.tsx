@@ -40,6 +40,7 @@ export const TutorPage = () => {
                 onClick={() => {
                   localStorage.removeItem('user');
                   localStorage.removeItem('access_token');
+                  alert('Đăng xuất thành công!');
                   navigate('/');
                 }}
               >

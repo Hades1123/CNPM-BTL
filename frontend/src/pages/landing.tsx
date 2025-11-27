@@ -66,6 +66,8 @@ export const LandingPage = () => {
                     onClick={() => {
                       localStorage.removeItem('user');
                       localStorage.removeItem('access_token');
+                      setUser(null);
+                      alert('Đăng xuất thành công!');
                       navigate('/');
                     }}
                   >
@@ -78,9 +80,7 @@ export const LandingPage = () => {
                   <button className="nav-item" onClick={() => navigate('/login')}>
                     Đăng nhập
                   </button>
-                  <button className="nav-item" onClick={() => navigate('/feedback')}>
-                    Liên hệ
-                  </button>
+                  <button className="nav-item">Liên hệ</button>
                 </>
               )}
             </nav>
