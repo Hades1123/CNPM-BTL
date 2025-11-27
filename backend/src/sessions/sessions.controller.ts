@@ -9,8 +9,9 @@ export class SessionsController {
     constructor(private readonly sessionsService: SessionsService) {}
 
     @Get()
-    async getAllSessions() {
-        return this.sessionsService.getAllSessions();
+    async getAllSessions(@Request() req) {
+        const { sub } = req.user; // Lấy user ID từ JWT token
+        return this.sessionsService.getAllSessions(sub as number);
     }
 
     @Post(':id/register')

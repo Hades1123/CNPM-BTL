@@ -5,8 +5,8 @@ import { PrismaService } from '@/database/database.service';
 export class SessionsService {
     constructor(private prisma: PrismaService) {}
 
-    async getAllSessions() {
-        return this.prisma.session.findMany({
+    async getAllSessions(userId?: number) {
+        const sessions = await this.prisma.session.findMany({
             include: {
                 tutor: {
                     select: {
@@ -31,6 +31,37 @@ export class SessionsService {
                 createdAt: 'desc',
             },
         });
+
+        // If userId is provided, check registration status for each session
+        if (userId) {
+            const sessionIds = sessions.map(s => s.id);
+            const userRegistrations = await this.prisma.registration.findMany({
+                where: {
+                    studentId: userId,
+                    sessionId: { in: sessionIds },
+                    status: 'REGISTERED'
+                },
+                select: {
+                    sessionId: true,
+                    id: true,
+                    registeredAt: true,
+                    status: true
+                }
+            });
+
+            // Create a map for quick lookup
+            const registrationMap = new Map(
+                userRegistrations.map(reg => [reg.sessionId, reg])
+            );
+
+            // Add registration info to each session
+            return sessions.map(session => ({
+                ...session,
+                userRegistration: registrationMap.get(session.id) || null
+            }));
+        }
+
+        return sessions;
     }
 
     async registerForSession(sessionId: number, studentId: number) {
