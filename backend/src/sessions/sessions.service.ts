@@ -116,9 +116,9 @@ export class SessionsService {
             }
 
             // 4. Check session hasn't ended
-            // if (new Date(session.endTime) < new Date()) {
-            //     throw new SessionExpiredException();
-            // }
+            if (new Date(session.endTime) < new Date()) {
+                throw new SessionExpiredException();
+            }
 
             // 5. Create registration
             const registration = await tx.registration.create({
@@ -163,8 +163,8 @@ export class SessionsService {
                     id: true,
                     title: true,
                     startTime: true,
-                    endTime: true
-                }
+                    endTime: true,
+                },
             });
 
             if (!session) {
@@ -181,8 +181,8 @@ export class SessionsService {
                 },
                 select: {
                     id: true,
-                    status: true
-                }
+                    status: true,
+                },
             });
 
             if (!registration) {
@@ -235,5 +235,71 @@ export class SessionsService {
                 registration: updatedRegistration,
             };
         });
+    }
+
+    async getStudentRegistrations(studentId: number) {
+        const registrations = await this.prisma.registration.findMany({
+            where: {
+                studentId,
+                status: 'REGISTERED'
+            },
+            include: {
+                session: {
+                    include: {
+                        tutor: {
+                            select: {
+                                id: true,
+                                username: true,
+                                name: true,
+                                email: true
+                            }
+                        },
+                        materials: {
+                            select: {
+                                id: true,
+                                fileName: true,
+                                fileUrl: true,
+                                createdAt: true
+                            }
+                        },
+                        _count: {
+                            select: {
+                                registrations: {
+                                    where: {
+                                        status: 'REGISTERED'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: {
+                registeredAt: 'desc'
+            }
+        });
+
+        return registrations.map(reg => ({
+            registration: {
+                id: reg.id,
+                status: reg.status,
+                registeredAt: reg.registeredAt
+            },
+            session: {
+                id: reg.session.id,
+                title: reg.session.title,
+                description: reg.session.description,
+                startTime: reg.session.startTime,
+                endTime: reg.session.endTime,
+                location: reg.session.location,
+                maxStudents: reg.session.maxStudents,
+                createdAt: reg.session.createdAt,
+                updatedAt: reg.session.updatedAt,
+                currentStudents: reg.session._count.registrations,
+                availableSlots: reg.session.maxStudents - reg.session._count.registrations,
+                tutor: reg.session.tutor,
+                materials: reg.session.materials
+            }
+        }));
     }
 }

@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
+import { GetAllSessionsApiDoc, RegisterSessionApiDoc, CancelRegistrationApiDoc, GetMyRegistrationsApiDoc } from './docs/sessions.api.docs';
 
 @ApiTags('Sessions')
 @ApiBearerAuth()
@@ -12,6 +13,7 @@ export class SessionsController {
     constructor(private readonly sessionsService: SessionsService) {}
 
     @Get()
+    @GetAllSessionsApiDoc()
     async getAllSessions(@Request() req): Promise<ApiResponse<any>> {
         try {
             const { sub } = req.user; // Lấy user ID từ JWT token
@@ -28,7 +30,7 @@ export class SessionsController {
     }
 
     @Post(':id/register')
-    @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
+    @RegisterSessionApiDoc()
     async registerSession(@Param('id') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user; // Lấy user ID từ JWT token
         const result = await this.sessionsService.registerForSession(+sessionId, sub as number);
@@ -41,7 +43,7 @@ export class SessionsController {
     }
 
     @Delete(':id/register')
-    @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
+    @CancelRegistrationApiDoc()
     async cancelRegistration(@Param('id') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user; // Lấy user ID từ JWT token
         const result = await this.sessionsService.cancelRegistration(+sessionId, sub as number);
@@ -51,5 +53,22 @@ export class SessionsController {
             message: result.message,
             data: result.registration,
         };
+    }
+
+    @Get('my-registrations')
+    @GetMyRegistrationsApiDoc()
+    async getMyRegistrations(@Request() req): Promise<ApiResponse<any>> {
+        try {
+            const { sub } = req.user; // Lấy user ID từ JWT token
+            const registrations = await this.sessionsService.getStudentRegistrations(sub as number);
+
+            return {
+                success: true,
+                message: 'Student registrations retrieved successfully',
+                data: registrations
+            };
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
