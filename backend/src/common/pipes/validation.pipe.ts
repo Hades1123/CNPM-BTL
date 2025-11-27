@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
+import { ValidationException } from '@/common/exceptions/validation.exception';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
@@ -27,15 +28,7 @@ export class ValidationPipe implements PipeTransform<any> {
         return 'Validation error';
       });
 
-      throw new HttpException(
-        {
-          success: false,
-          message: 'Validation failed',
-          errors: errorMessages,
-          statusCode: HttpStatus.BAD_REQUEST,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new ValidationException(errorMessages);
     }
 
     return value;
