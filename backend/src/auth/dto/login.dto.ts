@@ -7,8 +7,8 @@ export class LoginDto {
         example: 'tutor_hung',
         type: String,
     })
-    @IsString()
-    @IsNotEmpty()
+    @IsString({ message: 'Tên đăng nhập phải là chuỗi ký tự' })
+    @IsNotEmpty({ message: 'Tên đăng nhập không được để trống' })
     username: string;
 
     @ApiProperty({
@@ -16,12 +16,7 @@ export class LoginDto {
         example: '12345',
         type: String,
     })
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-}
-
-export interface ILoginDto {
-    username: string;
+    @IsString({ message: 'Mật khẩu phải là chuỗi ký tự' })
+    @IsNotEmpty({ message: 'Mật khẩu không được để trống' })
     password: string;
 }

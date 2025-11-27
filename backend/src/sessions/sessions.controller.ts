@@ -2,6 +2,7 @@ import { Controller, Get, HttpException, HttpStatus, Param, Post, Delete, Reques
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
+import { type ApiResponse } from '@/types/global';
 
 @ApiTags('Sessions')
 @ApiBearerAuth()
@@ -11,7 +12,7 @@ export class SessionsController {
     constructor(private readonly sessionsService: SessionsService) {}
 
     @Get()
-    async getAllSessions(@Request() req) {
+    async getAllSessions(@Request() req): Promise<ApiResponse<any>> {
         try {
             const { sub } = req.user; // Lấy user ID từ JWT token
             const sessions = await this.sessionsService.getAllSessions(sub as number);
@@ -28,7 +29,7 @@ export class SessionsController {
 
     @Post(':id/register')
     @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
-    async registerSession(@Param('id') sessionId: number, @Request() req) {
+    async registerSession(@Param('id') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user; // Lấy user ID từ JWT token
         const result = await this.sessionsService.registerForSession(+sessionId, sub as number);
 
@@ -41,7 +42,7 @@ export class SessionsController {
 
     @Delete(':id/register')
     @ApiParam({ name: 'id', type: 'number', description: 'Session ID' })
-    async cancelRegistration(@Param('id') sessionId: number, @Request() req) {
+    async cancelRegistration(@Param('id') sessionId: number, @Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user; // Lấy user ID từ JWT token
         const result = await this.sessionsService.cancelRegistration(+sessionId, sub as number);
 
