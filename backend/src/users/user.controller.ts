@@ -1,6 +1,6 @@
-import { Controller, Get, Request } from '@nestjs/common';
+import { Controller, Get, Param, Request } from '@nestjs/common';
 import { UsersService } from './user.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -12,5 +12,11 @@ export class UserController {
     getProfile(@Request() req) {
         const { sub } = req.user;
         return this.userService.findUserById(sub as number);
+    }
+
+    @Get(':id')
+    @ApiParam({ name: 'id', type: 'number', description: 'User ID' })
+    getUserById(@Param('id') id: number) {
+        return this.userService.findUserById(+id);
     }
 }
