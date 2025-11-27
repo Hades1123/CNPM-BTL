@@ -1,9 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
+import { ValidationPipe } from '@/common/pipes/validation.pipe';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
+    // Apply global exception filter
+    app.useGlobalFilters(new AllExceptionsFilter());
+
+    // Apply global validation pipe
+    app.useGlobalPipes(new ValidationPipe());
+
+    // Accept cors policy
+    app.enableCors();
+    // Establish swagger document
     const config = new DocumentBuilder()
         .setTitle('CNPM Backend API')
         .setDescription('API documentation for CNPM project backend services')
@@ -18,4 +30,5 @@ async function bootstrap() {
 
     await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();
