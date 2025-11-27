@@ -52,4 +52,20 @@ export class SessionsController {
             data: result.registration,
         };
     }
+
+    @Get('my-registrations')
+    async getMyRegistrations(@Request() req): Promise<ApiResponse<any>> {
+        try {
+            const { sub } = req.user; // Lấy user ID từ JWT token
+            const registrations = await this.sessionsService.getStudentRegistrations(sub as number);
+
+            return {
+                success: true,
+                message: 'Student registrations retrieved successfully',
+                data: registrations
+            };
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
