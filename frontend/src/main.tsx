@@ -11,39 +11,68 @@ import { ProfilePage } from '@/pages/profile';
 import { FeedBackPage } from '@/pages/feedback';
 import TutorCourse from '@/pages/tutorCourse';
 
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+
 const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <LandingPage />,
-	},
-	{
-		path: '/login',
-		element: <LoginPage />,
-	},
-	{
-		path: 'findTutor',
-		element: <FindTutorPage />,
-	},
-	{
-		path: 'myCourse',
-		element: <MyCourse />,
-	},
-	{
-		path: 'tutor',
-		element: <TutorPage />,
-	},
-	{
-		path: 'profile',
-		element: <ProfilePage />,
-	},
-	{
-		path: 'feedback',
-		element: <FeedBackPage />,
-	},
-	{
-		path: 'tutorCourse',
-		element: <TutorCourse />,
-	},
+  {
+    path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+
+  {
+    path: 'profile',
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'feedback',
+    element: (
+      <ProtectedRoute>
+        <FeedBackPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: 'findTutor',
+    element: (
+      <ProtectedRoute allowedRoles={['STUDENT']}>
+        <FindTutorPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'myCourse',
+    element: (
+      <ProtectedRoute allowedRoles={['STUDENT']}>
+        <MyCourse />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: 'tutor',
+    element: (
+      <ProtectedRoute allowedRoles={['TUTOR']}>
+        <TutorPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'tutorCourse',
+    element: (
+      <ProtectedRoute allowedRoles={['TUTOR']}>
+        <TutorCourse />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(

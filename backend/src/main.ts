@@ -6,6 +6,13 @@ import { ValidationPipe } from '@/common/pipes/validation.pipe';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    // Accept cors policy
+    app.enableCors({
+        origin: 'http://localhost:5173', // FE React
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        allowedHeaders: 'Content-Type, Authorization',
+        credentials: true,
+    });
 
     // Apply global exception filter
     app.useGlobalFilters(new AllExceptionsFilter());
@@ -13,8 +20,6 @@ async function bootstrap() {
     // Apply global validation pipe
     app.useGlobalPipes(new ValidationPipe());
 
-    // Accept cors policy
-    app.enableCors();
     // Establish swagger document
     const config = new DocumentBuilder()
         .setTitle('CNPM Backend API')

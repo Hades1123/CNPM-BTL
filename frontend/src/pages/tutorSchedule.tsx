@@ -3,55 +3,66 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 
 export const TutorPage = () => {
-	const navigate = useNavigate();
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	return (
-		<>
-			<div className="poster-container">
-				{/* <!-- Background Shapes --> */}
-				<div className="background-shape shape-1"></div>
-				<div className="background-shape shape-2"></div>
-				<div className="background-shape shape-3"></div>
+  const navigate = useNavigate();
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  return (
+    <>
+      <div className="poster-container">
+        {/* <!-- Background Shapes --> */}
+        <div className="background-shape shape-1"></div>
+        <div className="background-shape shape-2"></div>
+        <div className="background-shape shape-3"></div>
 
-				<div className="content">
-					{/* <!-- Header --> */}
-					<header className="header">
-						<div className="logo">
-							<div className="logo-icon">
-								<i className="material-icons">school</i>
-							</div>
-							<div className="logo-text">Tutor Support System</div>
-						</div>
-						<nav className="nav-menu">
-							<button className="nav-item" onClick={() => navigate('/')}>
-								Trang chủ
-							</button>
-							<button className="nav-item" onClick={() => navigate('/tutor')}>
-								Lịch của tôi
-							</button>
-							<button className="nav-item" onClick={() => navigate('/tutorCourse')}>
-								Buổi học
-							</button>
-							<button className="nav-item" onClick={() => navigate('/profile')}>
-								Tài khoản
-							</button>
-						</nav>
-					</header>
+        <div className="content">
+          {/* <!-- Header --> */}
+          <header className="header">
+            <div className="logo">
+              <div className="logo-icon">
+                <i className="material-icons">school</i>
+              </div>
+              <div className="logo-text">Tutor Support System</div>
+            </div>
+            <nav className="nav-menu">
+              <button className="nav-item" onClick={() => navigate('/')}>
+                Trang chủ
+              </button>
+              <button className="nav-item" onClick={() => navigate('/tutor')}>
+                Lịch của tôi
+              </button>
+              <button className="nav-item" onClick={() => navigate('/tutorCourse')}>
+                Quản lý buổi học
+              </button>
+              <button className="nav-item" onClick={() => navigate('/profile')}>
+                Tài khoản
+              </button>
+              <button
+                className="nav-item logout-btn"
+                onClick={() => {
+                  localStorage.removeItem('user');
+                  localStorage.removeItem('access_token');
+                  alert('Đăng xuất thành công!');
+                  navigate('/');
+                }}
+              >
+                Đăng xuất
+              </button>
+            </nav>
+          </header>
 
-					{/* <!-- Page Title --> */}
-					<div
-						className="page-header-row"
-						style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '30px 0' }}
-					>
-						<h1 className="page-title" style={{ margin: 0 }}>
-							Quản lý Lịch biểu
-						</h1>
+          {/* <!-- Page Title --> */}
+          <div
+            className="page-header-row"
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '30px 0' }}
+          >
+            <h1 className="page-title" style={{ margin: 0 }}>
+              Quản lý Lịch biểu
+            </h1>
 
-						{/* Nút mở Modal */}
-						<button className="btn-primary-action" onClick={() => setIsAddModalOpen(true)}>
-							<i className="material-icons">add_circle</i> Thêm lịch rảnh
-						</button>
-					</div>
+            {/* Nút mở Modal */}
+            <button className="btn-primary-action" onClick={() => setIsAddModalOpen(true)}>
+              <i className="material-icons">add_circle</i> Thêm lịch rảnh
+            </button>
+          </div>
 
           {/* <!-- Simple Calendar Section --> */}
           <section className="calendar-section">
@@ -174,27 +185,27 @@ export const TutorPage = () => {
                   </div>
                 </div>
 
-								{/* Friday Column */}
-								<div className="day-column">
-									<div className="time-slot slot-available">
-										<span className="slot-time">8:00 - 9:30</span>
-										<span className="slot-label">Rảnh</span>
-									</div>
-									<div className="time-slot slot-available">
-										<span className="slot-time">9:30 - 11:00</span>
-										<span className="slot-label">Rảnh</span>
-									</div>
-									<div className="time-slot slot-booked">
-										<span className="slot-time">14:00 - 15:30</span>
-										<span className="slot-label">Đã ĐK</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-					{/* <!-- Session Requests Section --> */}
-					<section className="session-requests-section">
-						<h2 className="section-title">Yêu cầu buổi học mới</h2>
+                {/* Friday Column */}
+                <div className="day-column">
+                  <div className="time-slot slot-available">
+                    <span className="slot-time">8:00 - 9:30</span>
+                    <span className="slot-label">Rảnh</span>
+                  </div>
+                  <div className="time-slot slot-available">
+                    <span className="slot-time">9:30 - 11:00</span>
+                    <span className="slot-label">Rảnh</span>
+                  </div>
+                  <div className="time-slot slot-booked">
+                    <span className="slot-time">14:00 - 15:30</span>
+                    <span className="slot-label">Đã ĐK</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {/* <!-- Session Requests Section --> */}
+          <section className="session-requests-section">
+            <h2 className="section-title">Yêu cầu buổi học mới</h2>
 
             <div className="request-card">
               <div className="request-header">
@@ -309,88 +320,88 @@ export const TutorPage = () => {
             </div>
           </section>
 
-					{/* <!-- Footer --> */}
-					<footer className="footer">
-						<p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
-						<p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH - TRƯƠNG ĐẠI HỌC BÁCH KHOA</p>
-					</footer>
-				</div>
-			</div>
-			{isAddModalOpen && (
-				<div className="modal-overlay">
-					<div className="modal-content" style={{ maxWidth: '600px' }}>
-						<div className="modal-header">
-							<h2>Thiết lập lịch rảnh mới</h2>
-							<button className="close-btn" onClick={() => setIsAddModalOpen(false)}>
-								&times;
-							</button>
-						</div>
+          {/* <!-- Footer --> */}
+          <footer className="footer">
+            <p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
+            <p>ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH - TRƯƠNG ĐẠI HỌC BÁCH KHOA</p>
+          </footer>
+        </div>
+      </div>
+      {isAddModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '600px' }}>
+            <div className="modal-header">
+              <h2>Thiết lập lịch rảnh mới</h2>
+              <button className="close-btn" onClick={() => setIsAddModalOpen(false)}>
+                &times;
+              </button>
+            </div>
 
-						<div className="modal-body">
-							{/* Copy form cũ vào đây và chỉnh lại CSS chút cho gọn */}
+            <div className="modal-body">
+              {/* Copy form cũ vào đây và chỉnh lại CSS chút cho gọn */}
 
-							<div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
-								<div className="form-group" style={{ flex: 1 }}>
-									<label className="form-label">Từ ngày</label>
-									<input type="date" className="form-input" />
-								</div>
-								<div className="form-group" style={{ flex: 1 }}>
-									<label className="form-label">Đến ngày</label>
-									<input type="date" className="form-input" />
-								</div>
-							</div>
+              <div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Từ ngày</label>
+                  <input type="date" className="form-input" />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Đến ngày</label>
+                  <input type="date" className="form-input" />
+                </div>
+              </div>
 
-							<div className="form-group" style={{ marginBottom: '15px' }}>
-								<label className="form-label">Lặp lại vào các ngày</label>
-								<div className="weekdays-selector" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-									{/* Checkbox rút gọn */}
-									{['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((day, index) => (
-										<label key={index} className="weekday-checkbox-item">
-											<input type="checkbox" />
-											<span className="checkmark">{day}</span>
-										</label>
-									))}
-								</div>
-							</div>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label className="form-label">Lặp lại vào các ngày</label>
+                <div className="weekdays-selector" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {/* Checkbox rút gọn */}
+                  {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((day, index) => (
+                    <label key={index} className="weekday-checkbox-item">
+                      <input type="checkbox" />
+                      <span className="checkmark">{day}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-							<div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
-								<div className="form-group" style={{ flex: 1 }}>
-									<label className="form-label">Bắt đầu</label>
-									<input type="time" className="form-input" />
-								</div>
-								<div className="form-group" style={{ flex: 1 }}>
-									<label className="form-label">Kết thúc</label>
-									<input type="time" className="form-input" />
-								</div>
-							</div>
+              <div className="form-row" style={{ display: 'flex', gap: '15px', marginBottom: '15px' }}>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Bắt đầu</label>
+                  <input type="time" className="form-input" />
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label className="form-label">Kết thúc</label>
+                  <input type="time" className="form-input" />
+                </div>
+              </div>
 
-							<div className="form-group">
-								<label className="form-label">Số lượng sinh viên tối đa</label>
-								<select className="form-select form-input">
-									<option>1 sinh viên</option>
-									<option>2 sinh viên</option>
-									<option>3-5 sinh viên (Nhóm)</option>
-								</select>
-							</div>
-						</div>
+              <div className="form-group">
+                <label className="form-label">Số lượng sinh viên tối đa</label>
+                <select className="form-select form-input">
+                  <option>1 sinh viên</option>
+                  <option>2 sinh viên</option>
+                  <option>3-5 sinh viên (Nhóm)</option>
+                </select>
+              </div>
+            </div>
 
-						<div className="modal-footer">
-							<button className="btn btn-cancel" onClick={() => setIsAddModalOpen(false)}>
-								Hủy bỏ
-							</button>
-							<button
-								className="btn btn-save"
-								onClick={() => {
-									alert('Đã thêm lịch!');
-									setIsAddModalOpen(false);
-								}}
-							>
-								Lưu lịch rảnh
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
-		</>
-	);
+            <div className="modal-footer">
+              <button className="btn btn-cancel" onClick={() => setIsAddModalOpen(false)}>
+                Hủy bỏ
+              </button>
+              <button
+                className="btn btn-save"
+                onClick={() => {
+                  alert('Đã thêm lịch!');
+                  setIsAddModalOpen(false);
+                }}
+              >
+                Lưu lịch rảnh
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };

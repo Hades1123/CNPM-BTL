@@ -1,55 +1,107 @@
 import '@/styles/landing.css';
 import { useNavigate } from 'react-router';
-
+import { useEffect, useState } from 'react';
 export const LandingPage = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
-	return (
-		<>
-			<div className="poster-container">
-				{/* <!-- Background Shapes --> */}
-				<div className="background-shape shape-1"></div>
-				<div className="background-shape shape-2"></div>
-				<div className="background-shape shape-3"></div>
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
 
-				<div className="content">
-					{/* <!-- Header --> */}
-					<header className="header">
-						<div className="logo">
-							<div className="logo-icon">
-								<i className="material-icons">school</i>
-							</div>
-							<div className="logo-text">Tutor Support System</div>
-						</div>
-						<nav className="nav-menu">
-							<button className="nav-item" onClick={() => navigate('/')}>
-								Trang chủ
-							</button>
-							<button className="nav-item" onClick={() => navigate('/login')}>
-								Đăng nhập
-							</button>
-							<button className="nav-item" onClick={() => navigate('/feedback')}>
-								Liên hệ
-							</button>
-						</nav>
-					</header>
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+  return (
+    <>
+      <div className="poster-container">
+        {/* <!-- Background Shapes --> */}
+        <div className="background-shape shape-1"></div>
+        <div className="background-shape shape-2"></div>
+        <div className="background-shape shape-3"></div>
 
-					{/* <!-- Hero Section --> */}
-					<section className="hero">
-						<h1 className="hero-title">Hệ thống Hỗ trợ Tutor/Mentor</h1>
-						<p className="hero-subtitle">
-							Nền tảng kỹ thuật số hiện đại và tập trung, giúp quản lý và vận hành hiệu quả chương trình Tutor/Mentor
-							tại Trường Đại học Bách Khoa Thành phố Hồ Chí Minh
-						</p>
-						<img
-							src="https://sfile.chatglm.cn/images-ppt/5964e2578c33.jpg"
-							alt="Sinh viên và Tutor"
-							className="hero-image"
-						/>
-						<button className="cta-button" onClick={() => navigate('/login')}>
-							Bắt đầu ngay
-						</button>
-					</section>
+        <div className="content">
+          {/* <!-- Header --> */}
+          <header className="header">
+            <div className="logo">
+              <div className="logo-icon">
+                <i className="material-icons">school</i>
+              </div>
+              <div className="logo-text">Tutor Support System</div>
+            </div>
+            <nav className="nav-menu">
+              <button className="nav-item" onClick={() => navigate('/')}>
+                Trang chủ
+              </button>
+
+              {user && user.role === 'STUDENT' && (
+                <>
+                  <button className="nav-item" onClick={() => navigate('/findTutor')}>
+                    Tìm tutor
+                  </button>
+                  <button className="nav-item" onClick={() => navigate('/myCourse')}>
+                    Lịch học
+                  </button>
+                </>
+              )}
+              {user && user.role === 'TUTOR' && (
+                <>
+                  <button className="nav-item" onClick={() => navigate('/tutor')}>
+                    Lịch của tôi
+                  </button>
+                  <button className="nav-item" onClick={() => navigate('/tutorCourse')}>
+                    Quản lý buổi học
+                  </button>
+                </>
+              )}
+              {user && (
+                <>
+                  <button className="nav-item" onClick={() => navigate('/profile')}>
+                    Tài khoản
+                  </button>
+                  <button
+                    className="nav-item logout-btn"
+                    onClick={() => {
+                      localStorage.removeItem('user');
+                      localStorage.removeItem('access_token');
+                      setUser(null);
+                      alert('Đăng xuất thành công!');
+                      navigate('/');
+                    }}
+                  >
+                    Đăng xuất
+                  </button>
+                </>
+              )}
+              {!user && (
+                <>
+                  <button className="nav-item" onClick={() => navigate('/login')}>
+                    Đăng nhập
+                  </button>
+                  <button className="nav-item">Liên hệ</button>
+                </>
+              )}
+            </nav>
+          </header>
+
+          {/* <!-- Hero Section --> */}
+          <section className="hero">
+            <h1 className="hero-title">Hệ thống Hỗ trợ Tutor/Mentor</h1>
+            <p className="hero-subtitle">
+              Nền tảng kỹ thuật số hiện đại và tập trung, giúp quản lý và vận hành hiệu quả chương trình Tutor/Mentor
+              tại Trường Đại học Bách Khoa Thành phố Hồ Chí Minh
+            </p>
+            <img
+              src="https://sfile.chatglm.cn/images-ppt/5964e2578c33.jpg"
+              alt="Sinh viên và Tutor"
+              className="hero-image"
+            />
+            <button className="cta-button" onClick={() => navigate('/login')}>
+              Bắt đầu ngay
+            </button>
+          </section>
 
           {/* <!-- Features Section --> */}
           <section className="section">

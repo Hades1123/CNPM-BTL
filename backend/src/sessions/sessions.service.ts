@@ -23,6 +23,7 @@ export class SessionsService {
                         name: true,
                         email: true,
                         role: true,
+                        faculty: true,
                     },
                 },
                 _count: {
@@ -241,7 +242,7 @@ export class SessionsService {
         const registrations = await this.prisma.registration.findMany({
             where: {
                 studentId,
-                status: 'REGISTERED'
+                status: 'REGISTERED',
             },
             include: {
                 session: {
@@ -251,39 +252,39 @@ export class SessionsService {
                                 id: true,
                                 username: true,
                                 name: true,
-                                email: true
-                            }
+                                email: true,
+                            },
                         },
                         materials: {
                             select: {
                                 id: true,
                                 fileName: true,
                                 fileUrl: true,
-                                createdAt: true
-                            }
+                                createdAt: true,
+                            },
                         },
                         _count: {
                             select: {
                                 registrations: {
                                     where: {
-                                        status: 'REGISTERED'
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                        status: 'REGISTERED',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
             orderBy: {
-                registeredAt: 'desc'
-            }
+                registeredAt: 'desc',
+            },
         });
 
-        return registrations.map(reg => ({
+        return registrations.map((reg) => ({
             registration: {
                 id: reg.id,
                 status: reg.status,
-                registeredAt: reg.registeredAt
+                registeredAt: reg.registeredAt,
             },
             session: {
                 id: reg.session.id,
@@ -298,8 +299,8 @@ export class SessionsService {
                 currentStudents: reg.session._count.registrations,
                 availableSlots: reg.session.maxStudents - reg.session._count.registrations,
                 tutor: reg.session.tutor,
-                materials: reg.session.materials
-            }
+                materials: reg.session.materials,
+            },
         }));
     }
 }
