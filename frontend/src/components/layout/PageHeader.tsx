@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router';
 
-export const PageHeader = () => {
+interface PageHeaderProps {
+  userRole?: 'STUDENT' | 'TUTOR' | 'ADMIN';
+}
+
+export const PageHeader = ({ userRole = 'STUDENT' }: PageHeaderProps) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -22,11 +26,17 @@ export const PageHeader = () => {
         <button className="nav-item" onClick={() => navigate('/')}>
           Trang chủ
         </button>
-        <button className="nav-item" onClick={() => navigate('/findTutor')}>
-          Tìm tutor
+        <button
+          className="nav-item"
+          onClick={() => (userRole === 'STUDENT' ? navigate('/findTutor') : navigate('/tutor'))}
+        >
+          {userRole === 'STUDENT' ? 'Tìm tutor' : 'Lịch của tôi'}
         </button>
-        <button className="nav-item" onClick={() => navigate('/myCourse')}>
-          Lịch học
+        <button
+          className="nav-item"
+          onClick={() => (userRole === 'STUDENT' ? navigate('/myCourse') : navigate('/tutorCourse'))}
+        >
+          {userRole === 'STUDENT' ? 'Lịch học' : 'Quản lý buổi học'}
         </button>
         <button className="nav-item" onClick={() => navigate('/profile')}>
           Tài khoản

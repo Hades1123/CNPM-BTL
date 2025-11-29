@@ -10,10 +10,11 @@ export class UserController {
     constructor(private readonly userService: UsersService) {}
 
     @Get('profile')
-    getProfile(@Request() req): ApiResponse<any> {
+    async getProfile(@Request() req): Promise<ApiResponse<any>> {
         const { sub } = req.user;
+        const user = await this.userService.findUserById(sub as number);
         return {
-            data: this.userService.findUserById(sub as number),
+            data: user,
             message: 'Get user by id successfully',
             success: true,
         };
