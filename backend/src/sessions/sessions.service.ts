@@ -13,8 +13,19 @@ import {
 export class SessionsService {
     constructor(private prisma: PrismaService) {}
 
-    async getAllSessions(userId?: number) {
+    async getAllSessions(userId?: number, search?: string) {
+        // Build where clause for search
+        const whereClause = search
+            ? {
+                  OR: [
+                      { title: { contains: search, mode: 'insensitive' as const } },
+                      { tutor: { name: { contains: search, mode: 'insensitive' as const } } },
+                  ],
+              }
+            : {};
+
         const sessions = await this.prisma.session.findMany({
+            where: whereClause,
             include: {
                 tutor: {
                     select: {

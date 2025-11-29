@@ -94,6 +94,27 @@
   margin-bottom: 30px;
 }
 
+.tutor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -200,6 +221,13 @@
   font-size: 14px;
   margin-bottom: 10px;
   line-height: 1.4;
+}
+
+.tutor-teaching-subjects {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+  font-style: italic;
 }
 
 .tutor-meta {
