@@ -3,23 +3,19 @@ import { useNavigate } from 'react-router';
 import { useEffect, useState, useCallback } from 'react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
-import { TutorCard } from '@/components/tutor/TutorCard';
-import { TutorModal } from '@/components/tutor/TutorModal';
-import { sessionsApi, groupSessionsByTutor } from '@/service/sessions';
-import type { Session, TutorWithStats } from '@/types/sessions';
+import { CourseCard } from '@/components/course/CourseCard';
+import { sessionsApi } from '@/service/sessions';
+import type { Session } from '@/types/sessions';
 
 export const FindTutorPage = () => {
   const navigate = useNavigate();
 
   // State for data
-  const [tutors, setTutors] = useState<TutorWithStats[]>([]);
-  const [allSessions, setAllSessions] = useState<Session[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
 
   // State for UI
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTutor, setSelectedTutor] = useState<TutorWithStats | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // State for search
   const [searchText, setSearchText] = useState('');
@@ -29,9 +25,8 @@ export const FindTutorPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const sessions = await sessionsApi.getAllSessions(search);
-      setAllSessions(sessions);
-      setTutors(groupSessionsByTutor(sessions));
+      const data = await sessionsApi.getAllSessions(search);
+      setSessions(data);
     } catch (err: any) {
       setError(err?.message || 'Lỗi khi lấy dữ liệu');
     } finally {
@@ -56,22 +51,6 @@ export const FindTutorPage = () => {
     }
   };
 
-  // Modal handlers
-  const handleOpenModal = (tutor: TutorWithStats) => {
-    setSelectedTutor(tutor);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedTutor(null);
-  };
-
-  // Get sessions for selected tutor
-  const tutorSessions = selectedTutor
-    ? allSessions.filter((s) => s.tutor?.id === selectedTutor.id)
-    : [];
-
   // Register for session
   const handleRegisterSession = async (sessionId: number) => {
     if (!window.confirm('Bạn có chắc chắn muốn đăng ký buổi học này?')) return;
@@ -88,7 +67,6 @@ export const FindTutorPage = () => {
 
       if (result.success) {
         alert('Đăng ký thành công!');
-        handleCloseModal();
         // Refresh data
         fetchSessions(searchText);
       } else {
@@ -109,14 +87,14 @@ export const FindTutorPage = () => {
       <div className="content">
         <PageHeader />
 
-        <h1 className="page-title">Tìm kiếm và Đăng ký Tutor</h1>
+        <h1 className="page-title">Tìm kiếm và Đăng ký Khóa học</h1>
 
         <section className="search-section">
           <div className="search-bar">
             <input
               type="text"
               className="search-input"
-              placeholder="Tìm kiếm theo tên tutor hoặc môn học..."
+              placeholder="Tìm kiếm theo tên khóa học hoặc tutor..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -127,21 +105,21 @@ export const FindTutorPage = () => {
           </div>
         </section>
 
-        <section className="tutor-list-section">
+        <section className="course-list-section">
           <div className="section-header">
-            <h2 className="section-title">Danh sách Tutor ({tutors.length})</h2>
+            <h2 className="section-title">Danh sách khóa học ({sessions.length})</h2>
           </div>
 
-          {loading && <div className="loading">Đang tải danh sách tutor...</div>}
+          {loading && <div className="loading">Đang tải danh sách khóa học...</div>}
           {error && <div className="error">Lỗi: {error}</div>}
 
-          <div className="tutor-grid">
-            {tutors.length === 0 && !loading && (
-              <p className="no-results">Không tìm thấy Tutor nào phù hợp.</p>
+          <div className="course-grid">
+            {sessions.length === 0 && !loading && (
+              <p className="no-results">Không tìm thấy khóa học nào phù hợp.</p>
             )}
 
-            {tutors.map((tutor) => (
-              <TutorCard key={tutor.id} tutor={tutor} onBookSession={handleOpenModal} />
+            {sessions.map((session) => (
+              <CourseCard key={session.id} session={session} onRegister={handleRegisterSession} />
             ))}
           </div>
         </section>
@@ -150,15 +128,6 @@ export const FindTutorPage = () => {
           <p>© 2025 Tutor Support System. Đã đăng ký bản quyền.</p>
         </footer>
       </div>
-
-      {isModalOpen && selectedTutor && (
-        <TutorModal
-          tutor={selectedTutor}
-          sessions={tutorSessions}
-          onClose={handleCloseModal}
-          onRegister={handleRegisterSession}
-        />
-      )}
     </div>
   );
 };

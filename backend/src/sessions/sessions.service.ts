@@ -14,13 +14,10 @@ export class SessionsService {
     constructor(private prisma: PrismaService) {}
 
     async getAllSessions(userId?: number, search?: string) {
-        // Build where clause for search
+        // Build where clause for search (MySQL is case-insensitive by default)
         const whereClause = search
             ? {
-                  OR: [
-                      { title: { contains: search, mode: 'insensitive' as const } },
-                      { tutor: { name: { contains: search, mode: 'insensitive' as const } } },
-                  ],
+                  OR: [{ title: { contains: search } }, { tutor: { name: { contains: search } } }],
               }
             : {};
 
