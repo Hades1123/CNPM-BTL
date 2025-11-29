@@ -51,3 +51,44 @@ export interface RegisterApiResponse {
   message: string;
   data: Registration;
 }
+
+// Material attached to a session
+export interface Material {
+  id: number;
+  fileName: string;
+  fileUrl: string;
+  createdAt: string;
+}
+
+// Session with materials for student's registered sessions
+export interface SessionWithMaterials {
+  id: number;
+  title: string;
+  description?: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  maxStudents: number;
+  createdAt: string;
+  updatedAt: string;
+  currentStudents: number;
+  availableSlots: number;
+  tutor: Pick<Tutor, 'id' | 'username' | 'name' | 'email'>;
+  materials: Material[];
+}
+
+// My registration with session details
+export interface MyRegistration {
+  registration: {
+    id: number;
+    status: string;
+    registeredAt: string;
+  };
+  session: SessionWithMaterials;
+}
+
+export interface MyRegistrationsApiResponse {
+  success: boolean;
+  message: string;
+  data: MyRegistration[];
+}

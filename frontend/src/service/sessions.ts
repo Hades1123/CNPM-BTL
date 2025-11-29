@@ -1,5 +1,11 @@
 import axios from './axios.customize';
-import type { Session, SessionsApiResponse, RegisterApiResponse, TutorWithStats } from '@/types/sessions';
+import type {
+  Session,
+  SessionsApiResponse,
+  RegisterApiResponse,
+  MyRegistration,
+  MyRegistrationsApiResponse,
+} from '@/types/sessions';
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL;
 
@@ -36,42 +42,12 @@ export const sessionsApi = {
     const response = await axios.delete<RegisterApiResponse>(`${API_BASE}/sessions/${sessionId}/register`);
     return response.data;
   },
-};
 
-/**
- * Group sessions by tutor and calculate stats
- */
-export const groupSessionsByTutor = (sessions: Session[]): TutorWithStats[] => {
-  const tutorMap = new Map<number, TutorWithStats & { teachingSubjectsSet: Set<string> }>();
-
-  sessions.forEach((session) => {
-    const studentCount = session._count?.registrations || 0;
-    const tutorId = session.tutor.id;
-
-    if (!tutorMap.has(tutorId)) {
-      tutorMap.set(tutorId, {
-        ...session.tutor,
-        totalStudents: studentCount,
-        teachingSubjects: [],
-        teachingSubjectsSet: new Set([session.title]),
-      });
-    } else {
-      const existingTutor = tutorMap.get(tutorId)!;
-      existingTutor.totalStudents += studentCount;
-      existingTutor.teachingSubjectsSet.add(session.title);
-    }
-  });
-
-  // Convert Set to Array
-  return Array.from(tutorMap.values()).map((tutor) => ({
-    id: tutor.id,
-    username: tutor.username,
-    name: tutor.name,
-    email: tutor.email,
-    role: tutor.role,
-    faculty: tutor.faculty,
-    avatar: tutor.avatar,
-    totalStudents: tutor.totalStudents,
-    teachingSubjects: Array.from(tutor.teachingSubjectsSet),
-  }));
+  /**
+   * Get current user's registrations with session details
+   */
+  getMyRegistrations: async (): Promise<MyRegistration[]> => {
+    const response = await axios.get<MyRegistrationsApiResponse>(`${API_BASE}/sessions/my-registrations`);
+    return response.data.data;
+  },
 };
