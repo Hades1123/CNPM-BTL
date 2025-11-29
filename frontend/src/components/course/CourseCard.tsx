@@ -29,10 +29,7 @@ export const CourseCard = ({ session, onRegister }: CourseCardProps) => {
   return (
     <div className={`course-card ${isRegistered ? 'course-registered' : ''}`}>
       <div className="course-header">
-        <h3 className="course-title">
-          {session.title}
-          {isRegistered && <span className="registered-badge">(Của bạn)</span>}
-        </h3>
+        <h3 className="course-title">{session.title}</h3>
         <div className={`slot-badge ${isFull && !isRegistered ? 'slot-full' : 'slot-available'}`}>
           {isFull ? 'Đã đầy' : `Còn ${availableSlots} chỗ`}
         </div>
