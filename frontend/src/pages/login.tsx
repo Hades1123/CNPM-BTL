@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     // Kiểm tra xem đã có token chưa
     const token = localStorage.getItem('access_token');
@@ -19,6 +20,7 @@ export const LoginPage = () => {
       }
     }
   }, [navigate]);
+
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -78,7 +80,7 @@ export const LoginPage = () => {
         username: form.username,
         password: form.password,
       };
-      const res = await fetch('http://localhost:3000/login', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginPayload),
@@ -119,7 +121,7 @@ export const LoginPage = () => {
         faculty: 'Bách Khoa',
       };
 
-      const res = await fetch('http://localhost:3000/register', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(registerPayload),
@@ -146,24 +148,13 @@ export const LoginPage = () => {
       handleRegister();
     }
   };
+
   return (
     <div className="login-poster-container">
-      {/* <!-- Background Shapes --> */}
-      <div className="background-shape shape-1"></div>
-      <div className="background-shape shape-2"></div>
-
       <div className="login-content">
         {/* <!-- Header --> */}
         <div className="header-content">
           <header className="login-header">
-            {/* <!-- Navigation Links -->
-                    <div className="header-nav">
-                        <a href="#">Trang chủ</a>
-                        <a href="#">Tìm tutor</a>
-                        <a href="#">Lịch học</a>
-                        <a href="#">Hỗ trợ</a>
-                    </div> --> */}
-
             <button className="login-logo" onClick={() => navigate('/')}>
               <img src="https://sfile.chatglm.cn/images-ppt/47f595050ee8.svg" alt="HCMUT Logo" className="logo-image" />
               <div className="logo-text">Tutor Support System</div>

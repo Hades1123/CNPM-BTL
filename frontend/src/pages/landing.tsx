@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
 export const LandingPage = () => {
   const navigate = useNavigate();
+
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -14,14 +15,10 @@ export const LandingPage = () => {
       navigate('/');
     }
   }, [navigate]);
+
   return (
     <>
       <div className="poster-container">
-        {/* <!-- Background Shapes --> */}
-        <div className="background-shape shape-1"></div>
-        <div className="background-shape shape-2"></div>
-        <div className="background-shape shape-3"></div>
-
         <div className="content">
           {/* <!-- Header --> */}
           <header className="header">
@@ -301,26 +298,3 @@ export const LandingPage = () => {
     </>
   );
 };
-
-{
-  /* <body>
-    
-
-    <script>
-        function switchTab(tabName) {
-            // Remove active classNameName from all tabs and contents
-            const tabs = document.querySelectorAll('.benefit-tab');
-            const contents = document.querySelectorAll('.benefit-content');
-
-            tabs.forEach(tab => tab.classNameNameList.remove('active'));
-            contents.forEach(content => content.classNameNameList.remove('active'));
-
-            // Add active classNameName to selected tab and content
-            event.target.classNameNameList.add('active');
-            document.getElementById(tabName).classNameNameList.add('active');
-        }
-    </script>
-</body>
-
-</html> */
-}
