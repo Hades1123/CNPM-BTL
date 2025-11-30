@@ -1,9 +1,25 @@
-import { Controller, Get, HttpException, HttpStatus, Param, Post, Delete, Request, UseFilters } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+    Controller,
+    Get,
+    HttpException,
+    HttpStatus,
+    Param,
+    Post,
+    Delete,
+    Request,
+    UseFilters,
+    Query,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
-import { GetAllSessionsApiDoc, RegisterSessionApiDoc, CancelRegistrationApiDoc, GetMyRegistrationsApiDoc } from './docs/sessions.api.docs';
+import {
+    GetAllSessionsApiDoc,
+    RegisterSessionApiDoc,
+    CancelRegistrationApiDoc,
+    GetMyRegistrationsApiDoc,
+} from './docs/sessions.api.docs';
 
 @ApiTags('Sessions')
 @ApiBearerAuth()
@@ -14,10 +30,11 @@ export class SessionsController {
 
     @Get()
     @GetAllSessionsApiDoc()
-    async getAllSessions(@Request() req): Promise<ApiResponse<any>> {
+    @ApiQuery({ name: 'search', required: false, description: 'Search by session title or tutor name' })
+    async getAllSessions(@Request() req, @Query('search') search?: string): Promise<ApiResponse<any>> {
         try {
             const { sub } = req.user; // Lấy user ID từ JWT token
-            const sessions = await this.sessionsService.getAllSessions(sub as number);
+            const sessions = await this.sessionsService.getAllSessions(sub as number, search);
 
             return {
                 success: true,
@@ -65,7 +82,7 @@ export class SessionsController {
             return {
                 success: true,
                 message: 'Student registrations retrieved successfully',
-                data: registrations
+                data: registrations,
             };
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
