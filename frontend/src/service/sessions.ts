@@ -5,6 +5,8 @@ import type {
   RegisterApiResponse,
   MyRegistration,
   MyRegistrationsApiResponse,
+  TutorSession,
+  TutorSessionsApiResponse,
 } from '@/types/sessions';
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL;
@@ -48,6 +50,14 @@ export const sessionsApi = {
    */
   getMyRegistrations: async (): Promise<MyRegistration[]> => {
     const response = await axios.get<MyRegistrationsApiResponse>(`${API_BASE}/sessions/my-registrations`);
+    return response.data.data;
+  },
+
+  /**
+   * Get tutor's own sessions
+   */
+  getTutorSessions: async (): Promise<TutorSession[]> => {
+    const response = await axios.get<TutorSessionsApiResponse>(`${API_BASE}/tutor/sessions`);
     return response.data.data;
   },
 };

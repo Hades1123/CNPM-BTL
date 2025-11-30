@@ -92,3 +92,29 @@ export interface MyRegistrationsApiResponse {
   message: string;
   data: MyRegistration[];
 }
+
+// Tutor's session with materials and registrations count
+export interface TutorSession {
+  id: number;
+  title: string;
+  description?: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  maxStudents: number;
+  createdAt: string;
+  updatedAt: string;
+  tutorId: number;
+  materials: Material[];
+  currentStudents: number;
+  availableSlots: number;
+  isFull: boolean;
+  isOngoing: boolean;
+  isPast: boolean;
+}
+
+export interface TutorSessionsApiResponse {
+  success: boolean;
+  message: string;
+  data: TutorSession[];
+}
