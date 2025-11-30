@@ -1,10 +1,10 @@
-import { Controller, Get, Param, Request, UseFilters, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Request, UseFilters, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TutorSessionsService } from './sessions.tutor.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
-import { type ApiResponse } from '@/types/global';
+import { UserRequest, type ApiResponse } from '@/types/global';
 import { GetTutorSessionsApiDoc, GetTutorSessionDetailsApiDoc } from './docs/tutor-sessions.api.docs';
-import { Role } from '@/decorators/customize';
+import type { ISessionRequest } from './dto/newSession-request';
 
 @ApiTags('Tutor Sessions')
 @ApiBearerAuth()
@@ -14,7 +14,6 @@ export class TutorSessionsController {
     constructor(private readonly tutorSessionsService: TutorSessionsService) {}
 
     @Get()
-    // @Role('TUTOR')
     @GetTutorSessionsApiDoc()
     async getMySessions(@Request() req): Promise<ApiResponse<any>> {
         try {
@@ -46,5 +45,16 @@ export class TutorSessionsController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Post()
+    async postCreateNewSession(@Request() req: ISessionRequest): Promise<ApiResponse<any>> {
+        const { sub } = req.user;
+        const response = await this.tutorSessionsService.createNewSession(req, +sub);
+        return {
+            data: response,
+            message: 'Success',
+            success: true,
+        };
     }
 }
