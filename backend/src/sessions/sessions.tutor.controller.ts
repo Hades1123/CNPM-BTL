@@ -4,6 +4,7 @@ import { TutorSessionsService } from './sessions.tutor.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
 import { GetTutorSessionsApiDoc, GetTutorSessionDetailsApiDoc } from './docs/tutor-sessions.api.docs';
+import { Role } from '@/decorators/customize';
 
 @ApiTags('Tutor Sessions')
 @ApiBearerAuth()
@@ -13,6 +14,7 @@ export class TutorSessionsController {
     constructor(private readonly tutorSessionsService: TutorSessionsService) {}
 
     @Get()
+    // @Role('TUTOR')
     @GetTutorSessionsApiDoc()
     async getMySessions(@Request() req): Promise<ApiResponse<any>> {
         try {
