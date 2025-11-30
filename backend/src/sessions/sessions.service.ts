@@ -7,6 +7,7 @@ import {
     SessionExpiredException,
     RegistrationNotFoundException,
     CannotCancelPastSessionException,
+    ScheduleConflictException,
 } from '@/common/exceptions/session.exceptions';
 
 @Injectable()
@@ -89,6 +90,7 @@ export class SessionsService {
                     id: true,
                     title: true,
                     maxStudents: true,
+                    startTime: true,
                     endTime: true,
                 },
             });
@@ -97,7 +99,7 @@ export class SessionsService {
                 throw new SessionNotFoundException();
             }
 
-            // 2. Check if user already registered (more efficient)
+            // 2. Check if user already registered
             const existingRegistration = await tx.registration.findUnique({
                 where: {
                     studentId_sessionId: {
@@ -105,10 +107,11 @@ export class SessionsService {
                         sessionId,
                     },
                 },
-                select: { id: true },
+                select: { id: true, status: true },
             });
 
-            if (existingRegistration) {
+            // If already registered with REGISTERED status, throw error
+            if (existingRegistration && existingRegistration.status === 'REGISTERED') {
                 throw new AlreadyRegisteredException();
             }
 
@@ -129,25 +132,20 @@ export class SessionsService {
                 throw new SessionExpiredException();
             }
 
-            // 5. Create registration
-            const registration = await tx.registration.create({
-                data: {
+            // 5. Check for schedule conflict with already registered sessions
+            const conflictingSession = await tx.registration.findFirst({
+                where: {
                     studentId,
-                    sessionId,
                     status: 'REGISTERED',
+                    session: {
+                        // Check if any registered session overlaps with the new session
+                        // Overlap happens when: existingStart < newEnd AND existingEnd > newStart
+                        AND: [{ startTime: { lt: session.endTime } }, { endTime: { gt: session.startTime } }],
+                    },
                 },
                 include: {
-                    student: {
-                        select: {
-                            id: true,
-                            username: true,
-                            name: true,
-                            email: true,
-                        },
-                    },
                     session: {
                         select: {
-                            id: true,
                             title: true,
                             startTime: true,
                             endTime: true,
@@ -155,6 +153,74 @@ export class SessionsService {
                     },
                 },
             });
+
+            if (conflictingSession) {
+                throw new ScheduleConflictException(conflictingSession.session.title);
+            }
+
+            // 6. Create or re-activate registration
+            let registration;
+
+            if (existingRegistration && existingRegistration.status === 'CANCELLED') {
+                // Re-activate cancelled registration
+                registration = await tx.registration.update({
+                    where: {
+                        studentId_sessionId: {
+                            studentId,
+                            sessionId,
+                        },
+                    },
+                    data: {
+                        status: 'REGISTERED',
+                        registeredAt: new Date(), // Update registration time
+                    },
+                    include: {
+                        student: {
+                            select: {
+                                id: true,
+                                username: true,
+                                name: true,
+                                email: true,
+                            },
+                        },
+                        session: {
+                            select: {
+                                id: true,
+                                title: true,
+                                startTime: true,
+                                endTime: true,
+                            },
+                        },
+                    },
+                });
+            } else {
+                // Create new registration
+                registration = await tx.registration.create({
+                    data: {
+                        studentId,
+                        sessionId,
+                        status: 'REGISTERED',
+                    },
+                    include: {
+                        student: {
+                            select: {
+                                id: true,
+                                username: true,
+                                name: true,
+                                email: true,
+                            },
+                        },
+                        session: {
+                            select: {
+                                id: true,
+                                title: true,
+                                startTime: true,
+                                endTime: true,
+                            },
+                        },
+                    },
+                });
+            }
 
             return {
                 message: 'Successfully registered for session',

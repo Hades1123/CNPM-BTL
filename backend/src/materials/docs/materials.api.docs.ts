@@ -1,13 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { CreateMaterialDto } from '../dto/create-material.dto';
+import { CreateMaterialDto } from '@/materials/dto/create-material.dto';
 
 export const CreateMaterialApiDoc = () => {
     return applyDecorators(
         ApiBearerAuth(),
         ApiOperation({
             summary: 'Create material for session',
-            description: 'Add a new material (file) to a specific session. Only the tutor of the session can add materials.',
+            description:
+                'Add a new material (file) to a specific session. Only the tutor of the session can add materials.',
         }),
         ApiParam({
             name: 'sessionId',

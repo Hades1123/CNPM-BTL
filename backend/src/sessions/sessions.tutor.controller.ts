@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Request, UseFilters, HttpException, HttpStatus } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TutorSessionsService } from './sessions.tutor.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
@@ -22,7 +22,7 @@ export class TutorSessionsController {
             return {
                 success: true,
                 message: 'Tutor sessions retrieved successfully',
-                data: sessions
+                data: sessions,
             };
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -39,7 +39,7 @@ export class TutorSessionsController {
             return {
                 success: true,
                 message: 'Session details retrieved successfully',
-                data: session
+                data: session,
             };
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
