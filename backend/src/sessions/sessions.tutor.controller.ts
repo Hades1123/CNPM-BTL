@@ -2,7 +2,7 @@ import { Controller, Get, Param, Request, UseFilters, HttpException, HttpStatus,
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { TutorSessionsService } from './sessions.tutor.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
-import { UserRequest, type ApiResponse } from '@/types/global';
+import { type ApiResponse } from '@/types/global';
 import { GetTutorSessionsApiDoc, GetTutorSessionDetailsApiDoc } from './docs/tutor-sessions.api.docs';
 import type { ISessionRequest } from './dto/newSession-request';
 
