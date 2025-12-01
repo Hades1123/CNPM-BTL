@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { MySessionCard } from '@/components/session/MySessionCard';
 import { sessionsApi } from '@/service/sessions';
+import { parseLocalDateTime } from '@/helpers/date';
 import type { MyRegistration } from '@/types/sessions';
 
 type FilterType = 'all' | 'upcoming' | 'completed';
@@ -46,7 +47,7 @@ export const MyCourse = () => {
   // Filter logic
   const now = new Date();
   const filteredRegistrations = registrations.filter((r) => {
-    const endTime = new Date(r.session.endTime);
+    const endTime = parseLocalDateTime(r.session.endTime);
     if (filter === 'upcoming') return endTime > now;
     if (filter === 'completed') return endTime <= now;
     return true;

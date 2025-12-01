@@ -1,4 +1,5 @@
 import type { Session } from '@/types/sessions';
+import { parseLocalDateTime, formatDate, formatTime } from '@/helpers/date';
 
 interface CourseCardProps {
   session: Session;
@@ -43,20 +44,12 @@ export const CourseCard = ({ session, onRegister }: CourseCardProps) => {
       <div className="course-details">
         <div className="course-detail-item">
           <i className="material-icons">event</i>
-          <span>{new Date(session.startTime).toLocaleDateString('vi-VN')}</span>
+          <span>{formatDate(parseLocalDateTime(session.startTime))}</span>
         </div>
         <div className="course-detail-item">
           <i className="material-icons">schedule</i>
           <span>
-            {new Date(session.startTime).toLocaleTimeString('vi-VN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}{' '}
-            -{' '}
-            {new Date(session.endTime).toLocaleTimeString('vi-VN', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            {formatTime(parseLocalDateTime(session.startTime))} - {formatTime(parseLocalDateTime(session.endTime))}
           </span>
         </div>
         <div className="course-detail-item">

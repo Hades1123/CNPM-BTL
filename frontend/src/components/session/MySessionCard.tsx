@@ -1,5 +1,6 @@
 import type { MyRegistration } from '@/types/sessions';
 import { useNavigate } from 'react-router'; // 1. Import useNavigate
+import { parseLocalDateTime, formatDate, formatTime } from '@/helpers/date';
 
 interface MySessionCardProps {
   data: MyRegistration;
@@ -11,8 +12,8 @@ export const MySessionCard = ({ data, onCancel }: MySessionCardProps) => {
   const navigate = useNavigate(); // 2. Khởi tạo navigate
   const { session } = data;
   const now = new Date();
-  const startTime = new Date(session.startTime);
-  const endTime = new Date(session.endTime);
+  const startTime = parseLocalDateTime(session.startTime);
+  const endTime = parseLocalDateTime(session.endTime);
 
   const isUpcoming = startTime > now;
   const isOngoing = startTime <= now && endTime > now;
