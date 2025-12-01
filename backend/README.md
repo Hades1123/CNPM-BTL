@@ -27,19 +27,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 **Khởi tạo prisma**
 
-# Bước 0: (nếu có code mới và bạn pull về) npx prisma migrate reset (ấn y)
-
-# Bước 1: npx prisma migrate dev --name init
-
-# BƯớc 2: npx prisma generate
+npm run prisma:init
 
 **Chạy (này khởi tạo thôi)**
 npm run dev
-
-**Khởi tạo dữ liệu cho mySQL**
-
-# Thoát chương trình ở trên
-
-# Copy file init.sql rồi chạy trong schema cnpm
-
-# npm run dev

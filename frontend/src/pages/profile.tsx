@@ -47,10 +47,6 @@ export const ProfilePage = () => {
 
   return (
     <div className="profile-poster-container">
-      <div className="background-shape shape-1"></div>
-      <div className="background-shape shape-2"></div>
-      <div className="background-shape shape-3"></div>
-
       <div className="profile-content">
         <PageHeader userRole={user.role} />
 
