@@ -10,7 +10,7 @@ import {
     UseFilters,
     Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { SessionsService } from './sessions.service';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { type ApiResponse } from '@/types/global';
