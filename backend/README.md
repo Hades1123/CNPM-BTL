@@ -29,5 +29,5 @@ https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-
 
 npm run prisma:init
 
-**Chạy (này khởi tạo thôi)**
+**Chạy chương trình (tự động init database với 1 vài dòng :D. Chi tiết vào folder database để xem : SeedDatabaseService)**
 npm run dev

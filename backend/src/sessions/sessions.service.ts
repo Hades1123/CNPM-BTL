@@ -9,6 +9,7 @@ import {
     CannotCancelPastSessionException,
     ScheduleConflictException,
 } from '@/common/exceptions/session.exceptions';
+import { Prisma } from '@/generated/prisma/client';
 
 @Injectable()
 export class SessionsService {
@@ -16,11 +17,15 @@ export class SessionsService {
 
     async getAllSessions(userId?: number, search?: string) {
         // Build where clause for search (MySQL is case-insensitive by default)
-        const whereClause = search
-            ? {
-                  OR: [{ title: { contains: search } }, { tutor: { name: { contains: search } } }],
-              }
-            : {};
+        // Only get sessions that haven't started yet
+        const whereClause: Prisma.SessionWhereInput = {
+            startTime: { gt: new Date() }, // Only future sessions
+            ...(search
+                ? {
+                      OR: [{ title: { contains: search } }, { tutor: { name: { contains: search } } }],
+                  }
+                : {}),
+        };
 
         const sessions = await this.prisma.session.findMany({
             where: whereClause,
