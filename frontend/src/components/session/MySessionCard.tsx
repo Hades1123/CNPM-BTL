@@ -1,4 +1,5 @@
 import type { MyRegistration } from '@/types/sessions';
+import { parseLocalDateTime, formatDate, formatTime } from '@/helpers/date';
 
 interface MySessionCardProps {
   data: MyRegistration;
@@ -9,8 +10,8 @@ interface MySessionCardProps {
 export const MySessionCard = ({ data, onCancel, onRate }: MySessionCardProps) => {
   const { session } = data;
   const now = new Date();
-  const startTime = new Date(session.startTime);
-  const endTime = new Date(session.endTime);
+  const startTime = parseLocalDateTime(session.startTime);
+  const endTime = parseLocalDateTime(session.endTime);
 
   const isUpcoming = startTime > now;
   const isOngoing = startTime <= now && endTime > now;
@@ -23,9 +24,6 @@ export const MySessionCard = ({ data, onCancel, onRate }: MySessionCardProps) =>
   };
 
   const status = getStatus();
-
-  const formatDate = (date: Date) => date.toLocaleDateString('vi-VN');
-  const formatTime = (date: Date) => date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <div className="session-card">

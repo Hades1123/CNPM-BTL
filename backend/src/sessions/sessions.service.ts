@@ -316,7 +316,9 @@ export class SessionsService {
         const registrations = await this.prisma.registration.findMany({
             where: {
                 studentId,
-                status: 'REGISTERED',
+                status: {
+                    in: ['REGISTERED', 'COMPLETED'],
+                },
             },
             include: {
                 session: {
