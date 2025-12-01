@@ -51,8 +51,13 @@ export const TutorPage = () => {
 
           {/* <!-- Page Title --> */}
           <div
-            className="page-header-row"
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '30px 0' }}
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              margin: '30px 0',
+            }}
           >
             <h1 className="page-title" style={{ margin: 0 }}>
               Quản lý Lịch biểu
