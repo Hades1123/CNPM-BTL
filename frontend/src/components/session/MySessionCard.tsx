@@ -1,12 +1,14 @@
 import type { MyRegistration } from '@/types/sessions';
+import { useNavigate } from 'react-router'; // 1. Import useNavigate
 
 interface MySessionCardProps {
   data: MyRegistration;
   onCancel: (sessionId: number) => void;
-  onRate: (sessionId: number) => void;
+  // onRate không cần truyền từ cha nữa vì mình sẽ navigate trực tiếp ở đây
 }
 
-export const MySessionCard = ({ data, onCancel, onRate }: MySessionCardProps) => {
+export const MySessionCard = ({ data, onCancel }: MySessionCardProps) => {
+  const navigate = useNavigate(); // 2. Khởi tạo navigate
   const { session } = data;
   const now = new Date();
   const startTime = new Date(session.startTime);
@@ -26,6 +28,22 @@ export const MySessionCard = ({ data, onCancel, onRate }: MySessionCardProps) =>
 
   const formatDate = (date: Date) => date.toLocaleDateString('vi-VN');
   const formatTime = (date: Date) => date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+  // 3. Hàm xử lý chuyển trang đánh giá
+  const handleRateClick = () => {
+    navigate('/feedback', {
+      state: {
+        sessionInfo: {
+          id: session.id,
+          title: session.title,
+          tutorName: session.tutor.name || session.tutor.username,
+          time: `${formatDate(startTime)} | ${formatTime(startTime)} - ${formatTime(endTime)}`,
+          location: session.location || 'Online',
+          role: 'STUDENT', // Đánh dấu là Student
+        },
+      },
+    });
+  };
 
   return (
     <div className="session-card">
@@ -78,20 +96,24 @@ export const MySessionCard = ({ data, onCancel, onRate }: MySessionCardProps) =>
       )}
 
       <div className="session-actions">
-        {isUpcoming && (
+        {isOngoing && (
+          <button className="session-button join-button">
+            <i className="material-icons">video_call</i>
+            Tham gia
+          </button>
+        )}
+        {(isOngoing || isUpcoming) && (
           <>
-            <button className="session-button join-button">
-              <i className="material-icons">video_call</i>
-              Tham gia
-            </button>
             <button className="session-button cancel-button" onClick={() => onCancel(session.id)}>
               <i className="material-icons">cancel</i>
               Hủy đăng ký
             </button>
           </>
         )}
+
+        {/* Nút Đánh giá: Gọi hàm handleRateClick */}
         {isCompleted && (
-          <button className="session-button rate-button" onClick={() => onRate(session.id)}>
+          <button className="session-button rate-button" onClick={handleRateClick}>
             <i className="material-icons">star</i>
             Đánh giá
           </button>

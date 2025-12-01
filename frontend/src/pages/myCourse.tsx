@@ -1,5 +1,5 @@
 import '@/styles/myCourse.css';
-import { useNavigate } from 'react-router';
+
 import { useEffect, useState } from 'react';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -10,8 +10,6 @@ import type { MyRegistration } from '@/types/sessions';
 type FilterType = 'all' | 'upcoming' | 'completed';
 
 export const MyCourse = () => {
-  const navigate = useNavigate();
-
   const [registrations, setRegistrations] = useState<MyRegistration[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,10 +41,6 @@ export const MyCourse = () => {
     } catch (err: any) {
       alert(err?.response?.data?.message || 'Lỗi khi hủy đăng ký');
     }
-  };
-
-  const handleRate = (sessionId: number) => {
-    navigate(`/feedback?sessionId=${sessionId}`);
   };
 
   // Filter logic
@@ -95,7 +89,7 @@ export const MyCourse = () => {
           )}
 
           {filteredRegistrations.map((reg) => (
-            <MySessionCard key={reg.registration.id} data={reg} onCancel={handleCancel} onRate={handleRate} />
+            <MySessionCard key={reg.registration.id} data={reg} onCancel={handleCancel} />
           ))}
         </section>
 

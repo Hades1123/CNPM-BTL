@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { TutorSessionCard } from '@/components/tutor/TutorSessionCard';
 import { EditSessionModal } from '@/components/tutor/EditSessionModal';
 import { CreateSessionModal, type CreateSessionData } from '@/components/tutor/CreateSessionModal';
+import { RecordProgressModal } from '@/components/tutor/RecordProgressModal';
 import type { TutorSession } from '@/types/sessions';
 
 const TutorCourse = () => {
@@ -12,6 +13,7 @@ const TutorCourse = () => {
   const [loading, setLoading] = useState(true);
   const [editingSession, setEditingSession] = useState<TutorSession | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [progressSession, setProgressSession] = useState<TutorSession | null>(null);
 
   useEffect(() => {
     fetchSessions();
@@ -45,6 +47,10 @@ const TutorCourse = () => {
     console.log('Create session:', data);
     setShowCreateModal(false);
     alert('Chức năng tạo buổi học đang được phát triển!');
+  };
+
+  const handleRecordProgress = (session: TutorSession) => {
+    setProgressSession(session);
   };
 
   if (loading) {
@@ -86,7 +92,14 @@ const TutorCourse = () => {
               </button>
             </div>
           ) : (
-            sessions.map((session) => <TutorSessionCard key={session.id} session={session} onEdit={handleEdit} />)
+            sessions.map((session) => (
+              <TutorSessionCard
+                key={session.id}
+                session={session}
+                onEdit={handleEdit}
+                onRecordProgress={handleRecordProgress}
+              />
+            ))
           )}
         </div>
       </div>
@@ -96,6 +109,7 @@ const TutorCourse = () => {
       )}
 
       {showCreateModal && <CreateSessionModal onClose={() => setShowCreateModal(false)} onCreate={handleCreate} />}
+      {progressSession && <RecordProgressModal session={progressSession} onClose={() => setProgressSession(null)} />}
     </div>
   );
 };
