@@ -37,7 +37,8 @@ export class SeedDatabaseService implements OnModuleInit {
             (2, 'NodeJS Backend Nâng cao', 'Kiến trúc Microservices',       '2025-12-07 07:00:00', '2025-12-07 11:00:00', 'Online Meet', 40, 1, NOW(), NOW()),
             (3, 'Nhập môn Trí tuệ nhân tạo', 'Các thuật toán tìm kiếm',     '2025-12-06 13:00:00', '2025-12-06 16:00:00', 'H6-302', 45, 2, NOW(), NOW()),
             (4, 'Machine Learning',        'Hồi quy tuyến tính',            '2025-12-04 13:00:00', '2025-12-04 16:00:00', 'H6-303', 30, 2, NOW(), NOW()),
-            (5, 'Vibe coding',      'Hướng dẫn sử dụng claude code hiệu quả','2025-12-05 08:00:00', '2025-12-05 10:00:00', 'Online', 5, 1, NOW(), NOW())
+            (5, 'Vibe coding',      'Hướng dẫn sử dụng claude code hiệu quả','2025-12-05 08:00:00', '2025-12-05 10:00:00', 'Online', 5, 1, NOW(), NOW()),
+            (6, 'Vibe coding with github copilot',      'Hướng dẫn sử dụng github copilot hiệu quả','2025-12-02 08:00:00', '2025-12-02 10:00:00', 'Online', 5, 1, NOW(), NOW())
         `;
 
         // Seed materials
@@ -47,17 +48,19 @@ export class SeedDatabaseService implements OnModuleInit {
             (2, 'Source Code Demo.zip',    'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 1, NOW()),
             (3, 'Microservices Guide.pdf', 'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 2, NOW()),
             (4, 'AI Introduction.pptx',    'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 3, NOW()),
-            (5, 'Dataset Kaggle.csv',      'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 4, NOW())
+            (5, 'Dataset Kaggle.csv',      'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 4, NOW()),
+            (6, 'Vibe coding kiếm pháp',      'https://res.cloudinary.com/dd8pxfuen/image/upload/SE251__ProjectDesc__Tutor_v1_jyebab.pdf', 6, NOW())
         `;
 
         // Seed registrations
         await this.prismaService.$executeRaw`
             INSERT INTO registrations (id, status, registeredAt, studentId, sessionId) VALUES 
-            (1, 'COMPLETED', NOW(), 3, 1),
+            (1, 'COMPLETED', '2025-11-20 10:00:00', 3, 1),
             (2, 'REGISTERED', NOW(), 3, 3),
             (3, 'REGISTERED', NOW(), 4, 1),
             (4, 'REGISTERED', NOW(), 4, 2),
-            (5, 'CANCELLED', NOW(), 5, 4)
+            (5, 'CANCELLED', NOW(), 5, 4),
+            (6, 'COMPLETED', '2025-11-20 11:00:00', 3, 6)
         `;
     }
 }

@@ -21,3 +21,15 @@ localhost:5173/feedback
 ### Code nhìn dài vậy thôi chứ chừng có api thì dùng map render cũng ngắn đi hẳn ! (à, có cài thư viện uuid để tạo unique key nữa)
 
 ### so với figma thì đã cắt bớt với chỉnh lại kha khá, nhưng nhìn chung cũng tạm :D
+
+**Danh sách tài khoản mật khẩu sẽ test**
+
+# tutor
+
+tutor_hung
+12345
+
+# student
+
+sv_an
+12345

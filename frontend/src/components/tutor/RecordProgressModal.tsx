@@ -15,7 +15,7 @@ export const RecordProgressModal = ({ session, onClose }: Props) => {
     const fetchDetails = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const base = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:3000';
+        const base = import.meta.env.VITE_BACKEND_URL;
 
         // Dùng lại API lấy chi tiết đã có
         const res = await fetch(`${base}/tutor/sessions/${session.id}`, {
